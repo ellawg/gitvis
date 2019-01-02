@@ -3,67 +3,76 @@ import Vuex from "vuex";
 
 import { auth, githubProvider } from "./utils/firebase";
 import { onLogin, onLogout } from "./vue-apollo";
+import {
+  SET_AUTH,
+  SET_USER,
+  SET_LOADING,
+  SET_INITIALIZED
+} from "./utils/mutations";
 
 Vue.use(Vuex);
 
-const authState = {
-  signedIn: false,
-  token: ""
-};
-
 export default new Vuex.Store({
   state: {
-    auth: authState,
+    auth: false,
     user: null,
-    loading: false
+    loading: {
+      login: false,
+      logout: false
+    },
+    initializeed: false
+  },
+  getters: {
+    isLoading(state) {
+      return Object.values(state.loading).reduce(
+        (acc, curr) => (curr ? curr : acc)
+      );
+    }
   },
   mutations: {
-    signIn(state, token) {
-      state.auth = {
-        signedIn: true,
-        token
-      };
+    [SET_AUTH](state, auth) {
+      state.auth = auth;
+      if (!auth) {
+        state.user = null;
+      }
     },
-    signOut(state) {
-      state.auth = authState;
-      state.user = null;
-    },
-    setUser(state, user) {
+    [SET_USER](state, user) {
       state.user = user;
     },
-    setLoading(state, loading) {
-      state.loading = loading;
+    [SET_LOADING](state, { name, loading }) {
+      state.loading[name] = loading;
+    },
+    [SET_INITIALIZED](state, bool) {
+      state.initializeed = bool;
     }
   },
   actions: {
     async githubLogin({ commit }, apolloClient) {
-      commit("setLoading", true);
+      commit(SET_LOADING, { name: "login", loading: true });
       let result;
       try {
         result = await auth.signInWithPopup(githubProvider);
       } catch (error) {
         // TODO: Handle error
+        console.log("signin error: ", error.message);
         return;
       }
       if (result.credential.accessToken) {
-        const { token } = result.credential;
-        await onLogin(apolloClient, token);
-        commit("signIn", token);
-        commit("setUser", result.user);
+        await onLogin(apolloClient, result.credential.token);
       }
-      commit("setLoading", false);
+      commit(SET_LOADING, { name: "login", loading: false });
     },
     async githubLogout({ commit }, apolloClient) {
-      commit("setLoading", true);
+      commit(SET_LOADING, { name: "logout", loading: true });
       try {
         await auth.signOut();
         await onLogout(apolloClient);
       } catch (error) {
         // TODO: Handle error
+        console.log("signout error: ", error.message);
         return;
       }
-      commit("signOut");
-      commit("setLoading", false);
+      commit(SET_LOADING, { name: "logout", loading: false });
     }
   }
 });
