@@ -8,7 +8,8 @@ const fb = firebase.initializeApp(config);
 const auth = fb.auth();
 
 // Set up github auth provider
-const githubProvider = new auth.GithubAuthProvider();
-githubProvider.addScope("repo", "user");
+const githubProvider = new firebase.auth.GithubAuthProvider();
+githubProvider.addScope("repo");
+githubProvider.addScope("user");
 
 export { auth, githubProvider };
