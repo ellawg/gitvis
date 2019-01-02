@@ -1,5 +1,6 @@
 <template>
     <div class="bubble-chart">
+        hej
 
     </div>
 </template>

@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
-import BubbleChart from "./views/Charts.vue"
+import Charts from "./views/Charts.vue"
 
 Vue.use(Router);
 
