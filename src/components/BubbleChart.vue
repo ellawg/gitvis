@@ -1,21 +1,96 @@
 <template>
-    <div class="bubble-chart">
-        hej
-
+    <div class="bubble-chart" id="bchart"><svg></svg>
+      <div id="tooltip"></div>
     </div>
 </template>
 
 <script>
+import * as d3 from "d3";
+const dataArr = [
+  {
+    id: "MDg6TGFuZ3VhZ2UxNDA=",
+    name: "JavaScript",
+    size: 0.6,
+    color: "#2E294E"
+  },
+  { id: "MDg6TGFuZ3VhZ2UxNDU=", name: "Python", size: 0.2, color: "#D7263D" },
+  { id: "MDg6TGFuZ3VhZ2UzMDg=", name: "CSS", size: 0.1, color: "#F46036" },
+  {
+    id: "MDg6TGFuZ3VhZ2UzMDt=",
+    name: "TypeScript",
+    size: 0.2,
+    color: "#1B998B"
+  }
+];
+
+var colorCircles = d3.scaleOrdinal(d3.schemeCategory10);
+
+function bubbleChart() {
+  let width = 500;
+  let height = 500;
+
+  const svg = d3
+    .select("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .append("g")
+    .attr("transform", "translate(0,0)");
+
+  var tooltip = d3.select("#tooltip");
+
+  const circles = svg
+    .selectAll(".topic")
+    .data(dataArr)
+    .enter()
+    .append("circle")
+    .attr("class", "topic")
+    .attr("r", d => 50 * d.size)
+    .style("fill", d => d.color)
+    .attr("transform", "translate(" + [width / 2, height / 2] + ")")
+    .on("mouseover", function(d) {
+      d3.select(this).style("fill", "lightblue");
+      tooltip.style("visibility", "visible").text(d.name);
+    })
+    // .on("mousemove", () =>
+    //   tooltip
+    //     .style("top", event.pageY - 10 + "px")
+    //     .style("left", event.pageX + 10 + "px")
+    // )
+    .on("mouseout", function(d) {
+      tooltip.style("visibility", "hidden").text("");
+      d3.select(this).style("fill", d.color);
+    });
+
+  function brightenColor(color) {}
+
+  const simulation = d3
+    .forceSimulation()
+    .force("charge", d3.forceManyBody().strength([-80]))
+    .force("x", d3.forceX().strength(0.05))
+    .force("y", d3.forceY().strength(0.05));
+
+  simulation.nodes(dataArr).on("tick", ticked);
+
+  function ticked() {
+    circles.attr("cx", d => d.x).attr("cy", d => d.y);
+  }
+}
+
 export default {
   name: "BubbleChart",
-  mounted: function(){
-      // runs when this component is mounted on the page
-      // this.el refers to first element inside template tag
-
+  mounted: function() {
+    // runs when this component is mounted on the page
+    bubbleChart();
   }
 };
 </script>
 
-<style scoped lang="scss">
-
+<style lang="scss">
+#tooltip {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  z-index: 10;
+  visibility: hidden;
+}
 </style>
