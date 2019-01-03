@@ -6,6 +6,8 @@
 
 <script>
 import * as d3 from "d3";
+import ColorLuminance from "../utils/colorluminance.js";
+
 const dataArr = [
   {
     id: "MDg6TGFuZ3VhZ2UxNDA=",
@@ -34,7 +36,7 @@ function bubbleChart() {
     .attr("width", width)
     .attr("height", height)
     .append("g")
-    .attr("transform", "translate(" + [width / 2, height / 2] + ")")
+    .attr("transform", "translate(" + [width / 2, height / 2] + ")");
 
   var tooltip = d3.select("#tooltip");
 
@@ -47,14 +49,9 @@ function bubbleChart() {
     .attr("r", d => 50 * d.size)
     .style("fill", d => d.color)
     .on("mouseover", function(d) {
-      d3.select(this).style("fill", "lightblue");
+      d3.select(this).style("fill", ColorLuminance(d.color, -0.3));
       tooltip.style("visibility", "visible").text(d.name);
     })
-    // .on("mousemove", () =>
-    //   tooltip
-    //     .style("top", event.pageY - 10 + "px")
-    //     .style("left", event.pageX + 10 + "px")
-    // )
     .on("mouseout", function(d) {
       tooltip.style("visibility", "hidden").text("");
       d3.select(this).style("fill", d.color);
@@ -91,12 +88,12 @@ export default {
   visibility: hidden;
 }
 
-.bc-circle{
+.bc-circle {
   transition: all 300ms;
 }
 
-.bc-circle:hover{
+.bc-circle:hover {
   transform: scale(1.05);
+  transform-origin: 0px 0px 0px;
 }
-
 </style>
