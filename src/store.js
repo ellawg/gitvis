@@ -20,7 +20,7 @@ export default new Vuex.Store({
       login: false,
       logout: false
     },
-    initializeed: false
+    initialized: false
   },
   getters: {
     isLoading(state) {
@@ -43,7 +43,7 @@ export default new Vuex.Store({
       state.loading[name] = loading;
     },
     [SET_INITIALIZED](state, bool) {
-      state.initializeed = bool;
+      state.initialized = bool;
     }
   },
   actions: {

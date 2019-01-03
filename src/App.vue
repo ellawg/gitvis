@@ -1,9 +1,13 @@
 <template>
   <div id="app">
-    <Nav v-bind:height="navHeight"/>
-    <main v-bind:style="{margin: navHeight + 'px'}">
-      <router-view/>
-    </main>
+    <md-app>
+      <md-app-toolbar md-waterfall md-mode="fixed">
+        <Nav/>
+      </md-app-toolbar>
+      <md-app-content>
+        <router-view/>
+      </md-app-content>
+    </md-app>
   </div>
 </template>
 
@@ -12,25 +16,12 @@ import Nav from "@/components/Nav.vue";
 
 export default {
   name: "app",
-  data() {
-    return { navHeight: 60 };
-  },
   components: {
     Nav
   }
 };
 </script>
 
-
 <style lang="scss">
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-body {
-  margin: 0;
-}
+// Global style here
 </style>

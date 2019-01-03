@@ -1,25 +1,30 @@
 <template>
-  <nav class="navbar" v-bind:style="{height: height + 'px'}">
-    <div class="nav-section">
-      <h3>gitvis</h3>
+  <div class="md-toolbar-row">
+    <div class="md-toolbar-section-start">
+      <h3 class="md-title">gitvis</h3>
     </div>
-    <div class="nav-section">
-      <button v-if="auth" @click="logout">Logout</button>
-      <button v-else @click="login">Login with GitHub</button>
+    <div v-if="auth && initialized" class="md-toolbar-section-end">
+      <md-button @click="logout">Logout</md-button>
+      <md-avatar class="avatar">
+        <img :src="avatar" alt>
+        <md-tooltip md-direction="bottom">{{userName}}</md-tooltip>
+      </md-avatar>
     </div>
-  </nav>
+    <div v-else-if="!auth && initialized" class="md-toolbar-section-end">
+      <md-button @click="login">Login with GitHub</md-button>
+    </div>
+  </div>
 </template>
 
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
 import { auth } from "../utils/firebase.js";
-import { SET_USER, SET_AUTH } from "../utils/mutations.js";
+import { SET_USER, SET_AUTH, SET_INITIALIZED } from "../utils/mutations.js";
 
 let unsubscribe;
 
 export default {
   name: "navbar",
-  props: ["height"],
   mounted() {
     unsubscribe = auth.onAuthStateChanged(user => {
       if (user) {
@@ -30,6 +35,7 @@ export default {
         // If no user is logged in
         this[SET_AUTH](false);
       }
+      this[SET_INITIALIZED](true);
     });
   },
   beforeDestroy() {
@@ -37,7 +43,10 @@ export default {
   },
   computed: {
     ...mapState({
-      auth: state => state.auth
+      auth: state => state.auth,
+      initialized: state => state.initialized,
+      avatar: state => (state.user ? state.user.photoURL : null),
+      userName: state => (state.user ? state.user.displayName : null)
     })
   },
   methods: {
@@ -48,25 +57,13 @@ export default {
       this.githubLogout(this.$apollo.provider.defaultClient);
     },
     ...mapActions(["githubLogin", "githubLogout"]),
-    ...mapMutations([SET_AUTH, SET_USER])
+    ...mapMutations([SET_AUTH, SET_USER, SET_INITIALIZED])
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.navbar {
-  width: 100vw;
-  position: fixed;
-  top: 0;
-  left: 0;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-.nav-section {
-  padding: 0 60px;
-  display: flex;
-  flex-direction: row;
-  align-content: center;
+.avatar {
+  margin: 0 8px;
 }
 </style>
