@@ -34,19 +34,18 @@ function bubbleChart() {
     .attr("width", width)
     .attr("height", height)
     .append("g")
-    .attr("transform", "translate(0,0)");
+    .attr("transform", "translate(" + [width / 2, height / 2] + ")")
 
   var tooltip = d3.select("#tooltip");
 
   const circles = svg
-    .selectAll(".topic")
+    .selectAll(".bc-circle")
     .data(dataArr)
     .enter()
     .append("circle")
-    .attr("class", "topic")
+    .attr("class", "bc-circle")
     .attr("r", d => 50 * d.size)
     .style("fill", d => d.color)
-    .attr("transform", "translate(" + [width / 2, height / 2] + ")")
     .on("mouseover", function(d) {
       d3.select(this).style("fill", "lightblue");
       tooltip.style("visibility", "visible").text(d.name);
@@ -60,8 +59,6 @@ function bubbleChart() {
       tooltip.style("visibility", "hidden").text("");
       d3.select(this).style("fill", d.color);
     });
-
-  function brightenColor(color) {}
 
   const simulation = d3
     .forceSimulation()
@@ -93,4 +90,13 @@ export default {
   z-index: 10;
   visibility: hidden;
 }
+
+.bc-circle{
+  transition: all 300ms;
+}
+
+.bc-circle:hover{
+  transform: scale(1.05);
+}
+
 </style>
