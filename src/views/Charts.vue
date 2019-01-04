@@ -9,11 +9,12 @@
 <script>
 // @ is an alias to /src
 import BubbleChart from "@/components/BubbleChart.vue";
+import ChordChart from "@/components/ChordChart.vue";
 
 export default {
   name: "charts",
   components: {
-    BubbleChart
+    BubbleChart, ChordChart
   }
 };
 </script>
