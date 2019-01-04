@@ -10,9 +10,6 @@
         <md-tooltip md-direction="bottom">{{userName}}</md-tooltip>
       </md-avatar>
     </div>
-    <div v-else-if="!auth && initialized" class="md-toolbar-section-end">
-      <md-button @click="login">Login with GitHub</md-button>
-    </div>
   </div>
 </template>
 
