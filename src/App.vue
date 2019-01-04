@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <md-app>
-      <md-app-toolbar md-waterfall md-mode="fixed">
+    <md-app md-waterfall md-mode="fixed">
+      <md-app-toolbar>
         <Nav/>
       </md-app-toolbar>
       <md-app-content>
