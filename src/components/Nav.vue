@@ -46,12 +46,19 @@ export default {
       userName: state => (state.user ? state.user.displayName : null)
     })
   },
+  watch: {
+    auth(val) {
+      console.log(val);
+      if (val) {
+        this.$router.push("/search");
+      } else {
+        this.$router.push("/");
+      }
+    }
+  },
   methods: {
-    login() {
-      this.githubLogin(this.$apollo.provider.defaultClient);
-    },
-    logout() {
-      this.githubLogout(this.$apollo.provider.defaultClient);
+    async logout() {
+      await this.githubLogout(this.$apollo.provider.defaultClient);
     },
     ...mapActions(["githubLogin", "githubLogout"]),
     ...mapMutations([SET_AUTH, SET_USER, SET_INITIALIZED])
