@@ -2,11 +2,6 @@
   <div class="home">
     <md-empty-state md-icon="insert_chart" md-label="Login with GitHub to start">
       <md-button v-if="!isLoading && initialized" @click="login" class="md-raised">Login</md-button>
-      <md-progress-spinner
-        v-else-if="isLoading && initialized"
-        class="md-accent"
-        md-mode="indeterminate"
-      ></md-progress-spinner>
     </md-empty-state>
   </div>
 </template>

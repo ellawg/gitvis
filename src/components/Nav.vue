@@ -23,6 +23,7 @@ let unsubscribe;
 export default {
   name: "navbar",
   mounted() {
+    console.log(this.$el); // TODO: This is a good way to find the svg.
     unsubscribe = auth.onAuthStateChanged(user => {
       if (user) {
         // If the user is logged in
@@ -48,7 +49,6 @@ export default {
   },
   watch: {
     auth(val) {
-      console.log(val);
       if (val) {
         this.$router.push("/search");
       } else {
