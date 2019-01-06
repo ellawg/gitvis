@@ -6,7 +6,6 @@ import { privateRoute, publicOnly } from "./utils/routeGuards";
 
 const Search = () => import("./views/Search.vue");
 const Visualization = () => import("./components/Visualization.vue");
-const SearchFilters = () => import("./components/Filters.vue");
 
 Vue.use(Router);
 
@@ -26,10 +25,6 @@ export default new Router({
       component: Search,
       beforeEnter: privateRoute,
       children: [
-        {
-          path: "/",
-          component: SearchFilters
-        },
         {
           path: ":query",
           name: "search-query",
