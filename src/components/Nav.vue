@@ -10,9 +10,6 @@
         <md-tooltip md-direction="bottom">{{userName}}</md-tooltip>
       </md-avatar>
     </div>
-    <div v-else-if="!auth && initialized" class="md-toolbar-section-end">
-      <md-button @click="login">Login with GitHub</md-button>
-    </div>
   </div>
 </template>
 
@@ -26,6 +23,7 @@ let unsubscribe;
 export default {
   name: "navbar",
   mounted() {
+    console.log(this.$el); // TODO: This is a good way to find the svg.
     unsubscribe = auth.onAuthStateChanged(user => {
       if (user) {
         // If the user is logged in
@@ -49,12 +47,18 @@ export default {
       userName: state => (state.user ? state.user.displayName : null)
     })
   },
+  watch: {
+    auth(val) {
+      if (val) {
+        this.$router.push("/search");
+      } else {
+        this.$router.push("/");
+      }
+    }
+  },
   methods: {
-    login() {
-      this.githubLogin(this.$apollo.provider.defaultClient);
-    },
-    logout() {
-      this.githubLogout(this.$apollo.provider.defaultClient);
+    async logout() {
+      await this.githubLogout(this.$apollo.provider.defaultClient);
     },
     ...mapActions(["githubLogin", "githubLogout"]),
     ...mapMutations([SET_AUTH, SET_USER, SET_INITIALIZED])

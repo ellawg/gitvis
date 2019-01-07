@@ -58,7 +58,7 @@ export default new Vuex.Store({
         return;
       }
       if (result.credential.accessToken) {
-        await onLogin(apolloClient, result.credential.token);
+        await onLogin(apolloClient, result.credential.accessToken);
       }
       commit(SET_LOADING, { name: "login", loading: false });
     },
