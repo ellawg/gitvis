@@ -2,7 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 
 import Home from "./views/Home.vue";
-import Charts from "./views/Charts.vue"
+import Charts from "./views/Charts.vue";
 import { privateRoute, publicOnly } from "./utils/routeGuards";
 
 const Search = () => import("./views/Search.vue");
@@ -33,6 +33,8 @@ export default new Router({
           props: true
         }
       ]
+    },
+    {
       path: "/charts",
       name: "charts",
       component: Charts
