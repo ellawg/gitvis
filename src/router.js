@@ -29,7 +29,7 @@ export default new Router({
         {
           path: ":query",
           name: "search-query",
-          component: Visualization,
+          component: Charts,
           props: true
         }
       ]
