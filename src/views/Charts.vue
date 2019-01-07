@@ -1,8 +1,13 @@
 <template>
   <div class="charts">
-      <chord-chart>
-
-      </chord-chart>
+    <div class="md-layout">
+      <div class="md-layout-item">
+        <bubble-chart></bubble-chart>
+      </div>
+      <div class="md-layout-item">
+        <chord-chart></chord-chart>
+      </div>
+    </div>
   </div>
 </template>
 

@@ -1,8 +1,11 @@
 <template>
-    <div class="chart">
-        <div id="tooltip">
-        </div>
+  <div class="chart">
+    <div id="cchart">
+      <div id="tooltip">
+        <svg></svg>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -16,7 +19,7 @@ const dataArr = [
     [13128552, 51157106.35, 42750171.33, 0, 465760.95, 9280851.06],
     [2356788.67, 3246391.63, 2156705.52, 542335.23, 0, 698494.45],
     [29979211.06, 81768936.37, 26701381.80, 14101623.12, 826491.23, 0]
-  ]
+]
 
 function ChordChart(){
 
@@ -32,7 +35,7 @@ const width = 500 - (margin.left + margin.right);
 const height = 500 - (margin.top + margin.bottom);
 
 const chart = d3
-  .select('.chart');
+  .select('#cchart');
 
 const tooltip = d3
   .select('#tooltip');

@@ -1,7 +1,8 @@
 <template>
-    <div class="bubble-chart" id="bchart"><svg></svg>
-      <div id="tooltip"></div>
-    </div>
+  <div id="bchart">
+    <svg></svg>
+    <div id="tooltip"></div>
+  </div>
 </template>
 
 <script>
