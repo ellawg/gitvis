@@ -25,7 +25,6 @@ const dataArr = [
   }
 ];
 
-var colorCircles = d3.scaleOrdinal(d3.schemeCategory10);
 
 function bubbleChart() {
   let width = 500;
@@ -38,7 +37,7 @@ function bubbleChart() {
     .append("g")
     .attr("transform", "translate(" + [width / 2, height / 2] + ")");
 
-  var tooltip = d3.select("#tooltip");
+  const tooltip = d3.select("#tooltip");
 
   const circles = svg
     .selectAll(".bc-circle")

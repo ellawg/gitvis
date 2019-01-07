@@ -1,8 +1,8 @@
 <template>
   <div class="charts">
-      <bubble-chart>
+      <chord-chart>
 
-      </bubble-chart>
+      </chord-chart>
   </div>
 </template>
 
