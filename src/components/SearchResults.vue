@@ -1,12 +1,13 @@
 <template>
   <div>
     <div v-if="$apollo.loading">Loading</div>
-    <div v-else>{{search}}</div>
+    <div v-else>{{languages}}</div>
   </div>
 </template>
 
 <script>
 import SEARCH_RESULTS from "../queries/SearchResults.gql";
+import { topics, languages } from "../utils/dataMassage.js";
 
 export default {
   name: "search-results",
@@ -15,6 +16,14 @@ export default {
     return {
       search: {}
     };
+  },
+  computed: {
+    languages() {
+      return this.$apollo.loading ? null : languages(this.search);
+    },
+    topics() {
+      return this.$apollo.loading ? null : topics(this.search);
+    }
   },
   apollo: {
     search: {
