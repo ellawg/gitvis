@@ -5,7 +5,7 @@ import Home from "./views/Home.vue";
 import { privateRoute, publicOnly } from "./utils/routeGuards";
 
 const Search = () => import("./views/Search.vue");
-const Visualization = () => import("./components/Visualization.vue");
+const SearchResults = () => import("./components/SearchResults.vue");
 
 Vue.use(Router);
 
@@ -28,7 +28,7 @@ export default new Router({
         {
           path: ":query",
           name: "search-query",
-          component: Visualization,
+          component: SearchResults,
           props: true
         }
       ]
