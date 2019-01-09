@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import SEARCH_RESULTS from "../queries/SearchResults.gql";
+import SEARCH_RESULTS from "../queries/SearchResults.js";
 import { topics, languages } from "../utils/dataMassage.js";
 
 export default {
@@ -37,4 +37,3 @@ export default {
   }
 };
 </script>
-
