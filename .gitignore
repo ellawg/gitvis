@@ -282,3 +282,4 @@ $RECYCLE.BIN/
 
 # End of https://www.gitignore.io/api/web,node,vuejs,linux,macos,windows,firebase,jetbrains+all,visualstudiocode
 
+graphql.config.json
