@@ -9,7 +9,7 @@ query SearchResults($query: String!) {
           homepageUrl
           url
           nameWithOwner
-          languages(first: 10) {
+          languages(first: 15) {
             totalCount
             totalSize
             edges {
@@ -25,7 +25,7 @@ query SearchResults($query: String!) {
             name
           }
           pushedAt
-          repositoryTopics(first: 10) {
+          repositoryTopics(first: 15) {
             totalCount
             edges {
               node {
