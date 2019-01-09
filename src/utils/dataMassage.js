@@ -18,25 +18,21 @@ const countOtherLangs = (self, edges) => {
   return otherLangs;
 };
 
-const formatLangData = result => {
+const formatChordData = rawData => {
   // Convert the result object to the matrix that the chordchart needs
-  return {
-    chordData: Object.values(result).map(lang => {
-      const { otherLangs } = lang;
-      let otherLangsArray = [];
-      // Make sure that otherLangs contains all languages, even if 0, and convert to array at the same time
-      Object.values(result).forEach(({ id }) => {
-        if (otherLangs[id]) {
-          otherLangsArray.push(otherLangs[id].count);
-        } else {
-          otherLangsArray.push(0);
-        }
-      });
-      return otherLangsArray;
-    }),
-    // Convert the result object to an array
-    rawData: Object.values(result)
-  };
+  return rawData.map(lang => {
+    const { otherLangs } = lang;
+    let otherLangsArray = [];
+    // Make sure that otherLangs contains all languages, even if 0, and convert to array at the same time
+    rawData.forEach(({ id }) => {
+      if (otherLangs[id]) {
+        otherLangsArray.push(otherLangs[id].count);
+      } else {
+        otherLangsArray.push(0);
+      }
+    });
+    return otherLangsArray;
+  });
 };
 
 const languages = ({ edges }) => {
@@ -62,12 +58,12 @@ const languages = ({ edges }) => {
       result[id].otherLangs = countOtherLangs(result[id], edges);
     });
   });
-  // Format data before returing it
-  return formatLangData(result);
+  // Convert the result object to an array
+  return Object.values(result);
 };
 
 const topics = searchResults => {
   return searchResults;
 };
 
-export { languages, topics };
+export { languages, topics, formatChordData };

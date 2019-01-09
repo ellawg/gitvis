@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import SEARCH_RESULTS from "../queries/SearchResults.js";
-import { topics, languages } from "../utils/dataMassage.js";
+import SEARCH_QUERY from "../queries/SearchQuery.graphql";
+import { topics, languages, formatChordData } from "../utils/dataMassage.js";
 
 export default {
   name: "search-results",
@@ -23,11 +23,14 @@ export default {
     },
     topics() {
       return this.$apollo.loading ? null : topics(this.search);
+    },
+    chordData() {
+      return this.languages ? formatChordData(this.languages) : null;
     }
   },
   apollo: {
     search: {
-      query: SEARCH_RESULTS,
+      query: SEARCH_QUERY,
       variables() {
         return {
           query: this.query
