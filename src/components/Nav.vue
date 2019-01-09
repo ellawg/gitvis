@@ -21,7 +21,7 @@ import { SET_USER, SET_AUTH, SET_INITIALIZED } from "../utils/mutations.js";
 let unsubscribe;
 
 export default {
-  name: "navbar",
+  name: "Navbar",
   mounted() {
     console.log(this.$el); // TODO: This is a good way to find the svg.
     unsubscribe = auth.onAuthStateChanged(user => {

@@ -10,12 +10,9 @@ import SEARCH_QUERY from "../queries/SearchQuery.graphql";
 import { topics, languages, formatChordData } from "../utils/dataMassage.js";
 
 export default {
-  name: "search-results",
-  props: ["query"],
-  data() {
-    return {
-      search: {}
-    };
+  name: "SearchResults",
+  props: {
+    query: { type: String, default: "" }
   },
   computed: {
     languages() {
