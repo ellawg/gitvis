@@ -33,7 +33,7 @@ const formatChordData = languages => {
   });
 };
 
-const languages = ({ edges }) => {
+const languages = ({ edges }, minCount) => {
   const result = {};
   const count = 1;
   // Loop through repos
@@ -56,19 +56,21 @@ const languages = ({ edges }) => {
     });
   });
   // Convert the result object to an array
-  return Object.values(result);
+  return Object.values(result).filter(({ count }) => count >= minCount);
 };
 
-const topics = ({ edges }) => {
+const topics = ({ edges }, minCount) => {
   const result = {};
   const count = 1;
-  edges.forEach(({ node: { repositoryTopics } }) => {
-    repositoryTopics.edges.forEach(
+  edges.forEach(({ node: { repositoryTopics: { edges } } }) => {
+    edges.forEach(
       ({
-        topic: {
-          id,
-          name,
-          stargazers: { totalCount: stars }
+        node: {
+          topic: {
+            id,
+            name,
+            stargazers: { totalCount: stars }
+          }
         }
       }) => {
         if (result[id]) {
@@ -84,7 +86,8 @@ const topics = ({ edges }) => {
       }
     );
   });
-  return Object.values(result);
+  // TODO: Should we filter here?
+  return Object.values(result).filter(({ count }) => count >= minCount);
 };
 
 export { languages, topics, formatChordData };

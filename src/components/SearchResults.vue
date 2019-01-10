@@ -14,12 +14,19 @@ export default {
   props: {
     query: { type: String, default: "" }
   },
+  data() {
+    return {
+      minCount: 2
+    };
+  },
   computed: {
     languages() {
-      return this.$apollo.loading ? null : languages(this.search);
+      return this.$apollo.loading
+        ? null
+        : languages(this.search, this.minCount);
     },
     topics() {
-      return this.$apollo.loading ? null : topics(this.search);
+      return this.$apollo.loading ? null : topics(this.search, this.minCount);
     },
     chordData() {
       return this.languages ? formatChordData(this.languages) : null;
