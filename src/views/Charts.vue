@@ -15,13 +15,15 @@
 // @ is an alias to /src
 import BubbleChart from "@/components/BubbleChart.vue";
 import ChordChart from "@/components/ChordChart.vue";
+import BarChart from "@/components/BarChart.vue";
 import { bubbleData, chordData } from "../utils/mockData.js";
 
 export default {
   name: "charts",
   components: {
     BubbleChart,
-    ChordChart
+    ChordChart,
+    BarChart
   },
   data: function() {
     return { bubbleData, chordData };
