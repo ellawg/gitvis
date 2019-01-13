@@ -4,6 +4,7 @@
     <div class="md-layout-item" v-else>
       <p>{{languages}}</p>
     </div>
+    <charts v-else v-bind:bubble-data="topics" v-bind:chord-data="chordData" v-bind:bar-data="repos" v-bind:chord-labels="languages"></charts>
   </div>
 </template>
 
@@ -16,8 +17,11 @@ import {
   repos
 } from "../utils/dataMassage.js";
 
+import Charts from "../views/Charts.vue";
+
 export default {
   name: "SearchResults",
+  components: {Charts},
   props: {
     query: { type: String, default: "" }
   },

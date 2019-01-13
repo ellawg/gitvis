@@ -6,14 +6,13 @@
 
 <script>
 import * as d3 from "d3";
-const countries = ["CSS", "JavaScript", "HTML", "TypeScript", "Python", "Vue"];
 
 export default {
   name: "ChordChart",
   mounted: function() {
     this.chordChart();
   },
-  props: ["dataArr"],
+  props: ["dataArr", "labels"],
   methods: {
     chordChart() {
       const margin = {
@@ -78,7 +77,7 @@ export default {
           tooltip
             .append("p")
             .text(
-              `${countries[d.source.index]} - ${countries[d.target.index]}`
+              `${labels[d.source.index].name} - ${labels[d.target.index].name}`
             );
 
           tooltip
@@ -128,7 +127,7 @@ export default {
 
       text
         .append("text")
-        .text((d, i) => countries[i])
+        .text((d, i) => labels[i].name)
         .attr("font-weight", "bold")
         .attr("text-anchor", "middle")
         .attr("alignment-baseline", "middle")

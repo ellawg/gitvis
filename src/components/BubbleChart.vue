@@ -34,7 +34,7 @@ export default {
         .enter()
         .append("circle")
         .attr("class", "bc-circle")
-        .attr("r", d => 50 * d.size)
+        .attr("r", d => d.count)
         .style("fill", d => d.color)
         .on("mouseover", function(d) {
           d3.select(this).style("fill", ColorLuminance(d.color, -0.3));
@@ -47,9 +47,12 @@ export default {
 
       const simulation = d3
         .forceSimulation()
-        .force("charge", d3.forceManyBody().strength([-80]))
-        .force("x", d3.forceX().strength(0.05))
-        .force("y", d3.forceY().strength(0.05));
+        .force("charge", d3.forceManyBody().strength([10]))
+        .force("center", d3.forceCenter(width/20, height/20))
+        .force('collision', d3.forceCollide().radius(function(d) {
+    return d.count}))
+        //.force("x", d3.forceX().strength(0.15))
+        //.force("y", d3.forceY().strength(0.15));
 
       simulation.nodes(this.dataArr).on("tick", ticked);
 
