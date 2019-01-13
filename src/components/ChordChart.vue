@@ -1,10 +1,6 @@
 <template>
   <div class="chart">
-    <div id="cchart">
-      <div id="tooltip">
-        <svg></svg>
-      </div>
-    </div>
+    <div id="cchart"></div>
   </div>
 </template>
 
@@ -33,8 +29,6 @@ export default {
 
       const chart = d3.select("#cchart");
 
-      const tooltip = d3.select("#tooltip");
-
       const svg = chart
         .append("svg")
         .attr(
@@ -44,6 +38,8 @@ export default {
         )
         .append("g")
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+      const tooltip = chart.append("div").attr("id", "cc-tooltip");
 
       // DATA
 
@@ -167,14 +163,12 @@ export default {
   line-height: 2;
   text-align: center;
 }
-#tooltip {
+#cc-tooltip {
+  display: flex;
+  flex-direction: row-reverse;
   pointer-events: none;
-  position: absolute;
-  opacity: 0;
-  padding: 1rem;
-  background: #fff;
+  z-index: 10;
   color: #303950;
-  line-height: 2;
   transition: all 0.2s ease-out;
 }
 p {

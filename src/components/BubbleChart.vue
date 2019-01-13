@@ -1,8 +1,5 @@
 <template>
-  <div id="bchart">
-    <svg></svg>
-    <div id="tooltip"></div>
-  </div>
+  <div id="bchart"></div>
 </template>
 
 <script>
@@ -20,14 +17,16 @@ export default {
       let width = 500;
       let height = 500;
 
-      const svg = d3
-        .select("svg")
+      const chart = d3.select("#bchart");
+
+      const svg = chart
+        .append("svg")
         .attr("width", width)
         .attr("height", height)
         .append("g")
         .attr("transform", "translate(" + [width / 2, height / 2] + ")");
 
-      const tooltip = d3.select("#tooltip");
+      const tooltip = chart.append("div").attr("id", "bc-tooltip");
 
       const circles = svg
         .selectAll(".bc-circle")
@@ -63,12 +62,12 @@ export default {
 </script>
 
 <style lang="scss">
-#tooltip {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
+#bc-tooltip {
+  display: flex;
   z-index: 10;
   visibility: hidden;
+  color: #303950;
+  transition: all 0.2s ease-out;
 }
 
 .bc-circle {
