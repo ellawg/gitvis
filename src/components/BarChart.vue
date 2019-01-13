@@ -7,8 +7,7 @@
         v-bind:key="item.id"
         v-bind:style="{ width: (item.value*100) + '%', backgroundColor: item.color }"
       >
-        <span class="value">{{item.value*100 + '%'}}</span>
-        <md-tooltip md-direction="top">{{item.lang}}</md-tooltip>
+        <md-tooltip md-direction="top">{{item.lang + ' ' + item.value*100 + '%'}}</md-tooltip>
       </div>
     </div>
   </div>
@@ -35,17 +34,11 @@ export default {
 #bar-chart {
   display: flex;
   flex-direction: row;
-  height: 80px;
+  height: 20px;
 }
 
 .block:hover {
   opacity: 0.65;
 }
 
-.value {
-  display: block;
-  line-height: 1em;
-  color: #fff;
-  padding-top: 36px;
-}
 </style>
