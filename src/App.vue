@@ -1,12 +1,10 @@
 <template>
-  <md-app>
-    <md-app-toolbar>
-      <Nav/>
-    </md-app-toolbar>
-    <md-app-content>
+  <div id="app">
+    <Nav/>
+    <main id="main">
       <router-view/>
-    </md-app-content>
-  </md-app>
+    </main>
+  </div>
 </template>
 
 <script>
@@ -34,4 +32,8 @@ export default {
 );
 
 @import "~vue-material/dist/theme/all"; // Apply the theme
+
+#main {
+  margin: 24px 2%;
+}
 </style>
