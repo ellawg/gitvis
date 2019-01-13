@@ -1,14 +1,12 @@
 <template>
-  <div id="app">
-    <md-app md-waterfall md-mode="fixed">
-      <md-app-toolbar>
-        <Nav/>
-      </md-app-toolbar>
-      <md-app-content>
-        <router-view/>
-      </md-app-content>
-    </md-app>
-  </div>
+  <md-app>
+    <md-app-toolbar>
+      <Nav/>
+    </md-app-toolbar>
+    <md-app-content>
+      <router-view/>
+    </md-app-content>
+  </md-app>
 </template>
 
 <script>
@@ -30,8 +28,8 @@ export default {
   "default",
   (
     primary: md-get-palette-color(blue, A200),
-    // The primary color of your application
-      accent: md-get-palette-color(red, A200)// The accent or secondary color
+    accent: md-get-palette-color(red, A200),
+    theme: dark
   )
 );
 
