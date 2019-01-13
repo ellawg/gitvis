@@ -11,7 +11,7 @@
 import { mapActions, mapState, mapGetters } from "vuex";
 
 export default {
-  name: "home",
+  name: "Home",
   computed: {
     ...mapState(["initialized"]),
     ...mapGetters(["isLoading"])

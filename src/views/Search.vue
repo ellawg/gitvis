@@ -25,7 +25,7 @@
 
 <script>
 export default {
-  name: "search",
+  name: "Search",
   data() {
     return {
       query: ""
@@ -41,4 +41,3 @@ export default {
 
 <style lang="scss" scoped>
 </style>
-

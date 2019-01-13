@@ -1,7 +1,7 @@
 <template>
   <div class="md-toolbar-row">
     <div class="md-toolbar-section-start">
-      <h3 class="md-title">gitvis</h3>
+      <h3 @click="goHome" class="md-title nav-title">gitvis</h3>
     </div>
     <div v-if="auth && initialized" class="md-toolbar-section-end">
       <md-button @click="logout">Logout</md-button>
@@ -21,7 +21,7 @@ import { SET_USER, SET_AUTH, SET_INITIALIZED } from "../utils/mutations.js";
 let unsubscribe;
 
 export default {
-  name: "navbar",
+  name: "Navbar",
   mounted() {
     console.log(this.$el); // TODO: This is a good way to find the svg.
     unsubscribe = auth.onAuthStateChanged(user => {
@@ -60,6 +60,9 @@ export default {
     async logout() {
       await this.githubLogout(this.$apollo.provider.defaultClient);
     },
+    goHome() {
+      this.$router.push("/");
+    },
     ...mapActions(["githubLogin", "githubLogout"]),
     ...mapMutations([SET_AUTH, SET_USER, SET_INITIALIZED])
   }
@@ -69,5 +72,9 @@ export default {
 <style lang="scss" scoped>
 .avatar {
   margin: 0 8px;
+}
+
+.nav-title {
+  cursor: pointer;
 }
 </style>
