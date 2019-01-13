@@ -90,4 +90,39 @@ const topics = ({ edges }, minCount) => {
   return Object.values(result).filter(({ count }) => count >= minCount);
 };
 
-export { languages, topics, formatChordData };
+const langSizeCalc = ({ edges, totalSize }) => {
+  return edges.map(({ node: { color, name, id }, size }) => ({
+    color,
+    name,
+    id,
+    size: size / totalSize
+  }));
+};
+
+const repos = ({ edges }) => {
+  const result = [];
+  edges.forEach(
+    ({
+      node: {
+        id,
+        url,
+        forkCount: forks,
+        languages,
+        nameWithOwner: name,
+        stargazers: { totalCount: stars }
+      }
+    }) => {
+      result.push({
+        id,
+        url,
+        name,
+        stars,
+        forks,
+        languages: langSizeCalc(languages)
+      });
+    }
+  );
+  return result;
+};
+
+export { languages, topics, formatChordData, repos };

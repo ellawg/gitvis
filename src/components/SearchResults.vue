@@ -7,7 +7,12 @@
 
 <script>
 import SEARCH_QUERY from "../queries/SearchQuery.graphql";
-import { topics, languages, formatChordData } from "../utils/dataMassage.js";
+import {
+  topics,
+  languages,
+  formatChordData,
+  repos
+} from "../utils/dataMassage.js";
 
 export default {
   name: "SearchResults",
@@ -16,20 +21,22 @@ export default {
   },
   data() {
     return {
-      minCount: 2
+      minCount: 2,
+      search: {}
     };
   },
   computed: {
     languages() {
-      return this.$apollo.loading
-        ? null
-        : languages(this.search, this.minCount);
+      return languages(this.search, this.minCount);
     },
     topics() {
-      return this.$apollo.loading ? null : topics(this.search, this.minCount);
+      return topics(this.search, this.minCount);
+    },
+    repos() {
+      return repos(this.search);
     },
     chordData() {
-      return this.languages ? formatChordData(this.languages) : null;
+      return formatChordData(this.languages);
     }
   },
   apollo: {

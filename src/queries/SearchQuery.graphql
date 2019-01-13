@@ -4,10 +4,9 @@ query SearchQuery($query: String = "visualization") {
       node {
         __typename
         ... on Repository {
-          description
           forkCount
-          homepageUrl
           url
+          id
           nameWithOwner
           languages(first: 15) {
             totalCount
@@ -24,7 +23,6 @@ query SearchQuery($query: String = "visualization") {
           primaryLanguage {
             name
           }
-          pushedAt
           repositoryTopics(first: 15) {
             totalCount
             edges {
