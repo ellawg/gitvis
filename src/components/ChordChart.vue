@@ -23,8 +23,10 @@ export default {
         chord: 15
       };
 
-      const width = 500 - (margin.left + margin.right);
-      const height = 500 - (margin.top + margin.bottom);
+      const width = Math.min(window.innerWidth, 700) - margin.left - margin.right;
+      const height = Math.min(window.innerWidth, 700) - margin.top - margin.bottom;
+      const innerRadius = Math.min(width, height) * .39;
+      const outerRadius = innerRadius * 1.1;
 
       const chart = d3.select("#cchart");
 
@@ -46,6 +48,35 @@ export default {
 
       const dataChord = chord(this.dataArr);
 
+      // GRADIENT
+
+      //Function to create the unique id for each chord gradient
+      function getGradID(d){ return "linkGrad-" + d.source.index + "-" + d.target.index; }
+
+      //Create the gradients definitions for each chord
+      var grads = svg.append("defs").selectAll("linearGradient")
+        .data(dataChord)
+        .enter().append("linearGradient")
+          //Create the unique ID for this specific source-target pairing
+        .attr("id", getGradID)
+        .attr("gradientUnits", "userSpaceOnUse")
+        //Find the location where the source chord starts
+        .attr("x1", function(d,i) { return innerRadius * Math.cos((d.source.endAngle-d.source.startAngle)/2 + d.source.startAngle - Math.PI/2); })
+        .attr("y1", function(d,i) { return innerRadius * Math.sin((d.source.endAngle-d.source.startAngle)/2 + d.source.startAngle - Math.PI/2); })
+        //Find the location where the target chord starts 
+        .attr("x2", function(d,i) { return innerRadius * Math.cos((d.target.endAngle-d.target.startAngle)/2 + d.target.startAngle - Math.PI/2); })
+        .attr("y2", function(d,i) { return innerRadius * Math.sin((d.target.endAngle-d.target.startAngle)/2 + d.target.startAngle - Math.PI/2); })
+
+      //Set the starting color (at 0%)
+      grads.append("stop")
+        .attr("offset", "0%")
+        .attr("stop-color", function(d){ return `hsl(${360 / dataChord.groups.length * d.source.index}, 50%, 50%)`; });
+
+      //Set the ending color (at 100%)
+      grads.append("stop")
+        .attr("offset", "100%")
+        .attr("stop-color", function(d){ return `hsl(${360 / dataChord.groups.length * d.target.index}, 50%, 50%)`; });
+
       // RIBBON
 
       const ribbon = d3.ribbon().radius(width / 2 - margin.chord);
@@ -62,11 +93,7 @@ export default {
         .append("path")
         .attr("d", ribbon)
         // determine the fill on the basis of the source object of each node
-        .attr(
-          "fill",
-          d =>
-            `hsl(${(360 / dataChord.groups.length) * d.source.index}, 50%, 50%)`
-        )
+        .style("fill", function(d){ return "url(#" + getGradID(d) + ")"; })
         // on hover increase the opacity of the ribbon
         .attr("opacity", 0.4)
         .on("mouseenter", function(d) {
