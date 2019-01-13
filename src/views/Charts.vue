@@ -7,6 +7,9 @@
       <div class="md-layout-item">
         <chord-chart v-bind:data-arr="chordData"></chord-chart>
       </div>
+       <div class="md-layout-item">
+        <bar-chart></bar-chart>
+      </div>
     </div>
   </div>
 </template>
