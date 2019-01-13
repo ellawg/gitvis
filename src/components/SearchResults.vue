@@ -2,9 +2,13 @@
   <div id="search-results" class="md-layout-item md-size-100 md-gutter md-layout">
     <div class="md-layout-item md-size-100" v-if="$apollo.loading">Loading</div>
     <div class="md-layout-item" v-else>
-      <p>{{languages}}</p>
+      <charts
+        v-bind:bubble-data="topics"
+        v-bind:chord-data="chordData"
+        v-bind:bar-data="repos"
+        v-bind:chord-labels="languages"
+      ></charts>
     </div>
-    <charts v-else v-bind:bubble-data="topics" v-bind:chord-data="chordData" v-bind:bar-data="repos" v-bind:chord-labels="languages"></charts>
   </div>
 </template>
 
@@ -21,7 +25,7 @@ import Charts from "../views/Charts.vue";
 
 export default {
   name: "SearchResults",
-  components: {Charts},
+  components: { Charts },
   props: {
     query: { type: String, default: "" }
   },
