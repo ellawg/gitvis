@@ -5,9 +5,9 @@
         <bubble-chart v-bind:data-arr="bubbleData"></bubble-chart>
       </div>
       <div class="md-layout-item">
-        <chord-chart v-bind:data-arr="chordData"></chord-chart>
+        <chord-chart v-bind:data-arr="chordData" v-bind:labels="chordLabels"></chord-chart>
       </div>
-       <div class="md-layout-item">
+      <div class="md-layout-item">
         <bar-chart></bar-chart>
       </div>
     </div>
@@ -19,7 +19,6 @@
 import BubbleChart from "@/components/BubbleChart.vue";
 import ChordChart from "@/components/ChordChart.vue";
 import BarChart from "@/components/BarChart.vue";
-import { bubbleData, chordData } from "../utils/mockData.js";
 
 export default {
   name: "charts",
@@ -28,8 +27,6 @@ export default {
     ChordChart,
     BarChart
   },
-  data: function() {
-    return { bubbleData, chordData };
-  }
+  props: ["bubbleData", "chordData", "barData", "chordLabels"]
 };
 </script>
