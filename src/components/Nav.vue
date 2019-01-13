@@ -1,16 +1,18 @@
 <template>
-  <div class="md-toolbar-row">
-    <div class="md-toolbar-section-start">
-      <h3 @click="goHome" class="md-title nav-title">gitvis</h3>
+  <md-toolbar>
+    <div class="md-toolbar-row">
+      <div class="md-toolbar-section-start">
+        <h3 @click="goHome" class="md-title nav-title">gitvis</h3>
+      </div>
+      <div v-if="auth && initialized" class="md-toolbar-section-end">
+        <md-button @click="logout">Logout</md-button>
+        <md-avatar class="avatar">
+          <img :src="avatar" alt>
+          <md-tooltip md-direction="bottom">{{userName}}</md-tooltip>
+        </md-avatar>
+      </div>
     </div>
-    <div v-if="auth && initialized" class="md-toolbar-section-end">
-      <md-button @click="logout">Logout</md-button>
-      <md-avatar class="avatar">
-        <img :src="avatar" alt>
-        <md-tooltip md-direction="bottom">{{userName}}</md-tooltip>
-      </md-avatar>
-    </div>
-  </div>
+  </md-toolbar>
 </template>
 
 <script>
