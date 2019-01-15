@@ -1,5 +1,5 @@
 <template>
-  <div id="search-results" class="md-layout-item md-size-100 md-gutter md-layout">
+  <div class="md-layout-item md-size-100 md-gutter md-layout">
     <div class="md-layout-item md-size-100" v-if="$apollo.loading">Loading</div>
     <div class="md-layout-item" v-else>
       <charts
@@ -61,9 +61,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-#search-results {
-  margin: 24px auto;
-}
-</style>
