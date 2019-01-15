@@ -4,7 +4,7 @@
       <g :transform="`translate(${margins.chart}, ${margins.chart})`"></g>
     </svg>
     <div class="tooltip-container">
-      <p>tooltip</p>
+      <p>{{tooltipText}}</p>
     </div>
   </div>
 </template>
@@ -17,6 +17,7 @@ export default {
   props: ["dataArr", "labels"],
   data() {
     return {
+      tooltipText: "",
       size: 500,
       margins: {
         chart: 24,
@@ -31,6 +32,12 @@ export default {
   },
   watch: {
     size() {
+      this.createChart();
+    },
+    dataArr() {
+      this.createChart();
+    },
+    labels() {
       this.createChart();
     }
   },
@@ -54,12 +61,8 @@ export default {
     this.onResize();
     this.createChart();
   },
-  updated() {
-    this.createChart();
-  },
   methods: {
     onResize(e) {
-      console.log(this.$el.clientWidth);
       this.size = this.$el.clientWidth;
     },
     svg() {
@@ -67,9 +70,6 @@ export default {
         .select(this.$el)
         .select("svg")
         .select("g");
-    },
-    tooltip() {
-      return d3.select(this.$el).select(".tooltip-container");
     },
     gradId(d) {
       return `linkGrad-${d.source.index}-${d.target.index}`;
@@ -87,10 +87,6 @@ export default {
         .outerRadius(this.chartSize / 2);
     },
     createChart() {
-      //Create the gradients definitions for each chord
-      const tooltip = this.tooltip();
-      const labels = this.labels;
-
       this.svg()
         .selectAll("*")
         .remove();
@@ -191,28 +187,21 @@ export default {
         })
         // on hover increase the opacity of the ribbon
         .attr("opacity", 0.4)
-        .on("mouseenter", function(d) {
-          d3.select(this)
+        .on("mouseenter", (d, i, nodes) => {
+          d3.select(nodes[i])
             .transition()
             .attr("opacity", 1);
 
-          tooltip
-            .append("p")
-            .text(
-              `${labels[d.source.index].name} - ${labels[d.target.index].name}`
-            );
-
-          tooltip.style("opacity", 1);
+          this.tooltipText = `${this.labels[d.source.index].name} - ${
+            this.labels[d.target.index].name
+          }`;
         })
-        .on("mouseout", function() {
-          d3.select(this)
+        .on("mouseout", (d, i, nodes) => {
+          d3.select(nodes[i])
             .transition()
             .attr("opacity", 0.4);
 
-          tooltip
-            .style("opacity", 0)
-            .selectAll("p")
-            .remove();
+          this.tooltipText = "";
         });
 
       const arcs = this.svg()
@@ -276,7 +265,6 @@ export default {
 .chord-chart {
   position: relative;
   width: 100%;
-  margin: 1rem auto;
   line-height: 2;
   text-align: center;
 }
