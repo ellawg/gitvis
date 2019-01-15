@@ -80,6 +80,9 @@ export default {
     genId(d) {
       return `id-${d.source.index}-${d.target.index}`;
     },
+    groupsGenId(d) {
+      return `id-${d.index}-${d.value}`;
+    },
     ribbon() {
       return d3.ribbon().radius(this.chartSize / 2 - this.margins.chord);
     },
@@ -215,7 +218,7 @@ export default {
     arcs() {
       const arcs = this.svg("g")
         .selectAll("g.arc")
-        .data(this.dataChord.groups, d => `id-${d.index}-${d.value}`);
+        .data(this.dataChord.groups, this.groupsGenId);
 
       arcs.exit().remove();
 
@@ -234,43 +237,50 @@ export default {
         .attr("d", this.arc())
         .attr("fill", (d, i) => this.labels[i].color);
     },
+    text() {
+      const text = this.svg("g")
+        .selectAll("g.text")
+        .data(this.dataChord.groups, this.groupsGenId);
+
+      text.exit().remove();
+
+      text.selectAll("text").remove();
+
+      text
+        .enter()
+        .append("g")
+        .attr("class", "text")
+        .attr(
+          "transform",
+          `translate(${this.chartSize / 2}, ${this.chartSize / 2})`
+        )
+        .merge(text)
+        .append("text")
+        .text((d, i) => this.labels[i].name)
+        .attr("font-weight", "bold")
+        .attr("text-anchor", "middle")
+        .attr("alignment-baseline", "middle")
+        .style("pointer-events", "none")
+        // detail a text shadow matching the color of the respective arc
+        .style("text-shadow", (d, i) => {
+          const color = this.labels[i].color;
+          return `1px 1px ${color}, -1px -1px ${color}, 1px -1px ${color}, -1px 1px ${color}`;
+        })
+        .attr("fill", "#fff")
+        .attr(
+          "transform",
+          d =>
+            `rotate(${(((d.endAngle + d.startAngle) / 2) * 180) /
+              Math.PI}) translate(0, ${-this.chartSize /
+              2}) rotate(-${(((d.endAngle + d.startAngle) / 2) * 180) /
+              Math.PI})`
+        );
+    },
     chart() {
       this.grads();
       this.ribbons();
       this.arcs();
-      // const text = this.svg()
-      //   .selectAll("g.text")
-      //   .data(this.dataChord.groups)
-      //   .enter()
-      //   .append("g")
-      //   .attr("class", "text")
-      //   .attr(
-      //     "transform",
-      //     `translate(${this.chartSize / 2}, ${this.chartSize / 2})`
-      //   );
-
-      // text
-      //   .append("text")
-      //   .text((d, i) => this.labels[i].name)
-      //   .attr("font-weight", "bold")
-      //   .attr("text-anchor", "middle")
-      //   .attr("alignment-baseline", "middle")
-      //   .style("pointer-events", "none")
-      //   // detail a text shadow matching the color of the respective arc
-      //   .style("text-shadow", d => {
-      //     const color = `hsl(${(360 / this.dataChord.groups.length) *
-      //       d.index},50%, 50%)`;
-      //     return `2px 2px ${color}, -2px -2px ${color}, 2px -2px ${color}, -2px 2px ${color}`;
-      //   })
-      //   .attr("fill", "#fff")
-      //   .attr(
-      //     "transform",
-      //     d =>
-      //       `rotate(${(((d.endAngle + d.startAngle) / 2) * 180) /
-      //         Math.PI}) translate(0, ${-this.chartSize /
-      //         2}) rotate(-${(((d.endAngle + d.startAngle) / 2) * 180) /
-      //         Math.PI})`
-      //   );
+      // this.text();
     }
   }
 };
