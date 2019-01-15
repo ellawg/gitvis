@@ -1,6 +1,7 @@
 <template>
   <div class="chord-chart">
     <svg class="chord-chart-svg" :width="size" :height="size">
+      <defs></defs>
       <g :transform="`translate(${margins.chart}, ${margins.chart})`"></g>
     </svg>
     <div class="tooltip-container">
@@ -15,8 +16,8 @@ import * as d3 from "d3";
 export default {
   name: "ChordChart",
   props: {
-    dataArr: { type: Array, default: [] },
-    labels: { type: Array, default: [] }
+    dataArr: { type: Array, default: () => [] },
+    labels: { type: Array, default: () => [] }
   },
   data() {
     return {
@@ -35,13 +36,13 @@ export default {
   },
   watch: {
     size() {
-      this.createChart();
+      this.chart();
     },
     dataArr() {
-      this.createChart();
+      this.chart();
     },
     labels() {
-      this.createChart();
+      this.chart();
     }
   },
   computed: {
@@ -62,23 +63,25 @@ export default {
   mounted() {
     window.addEventListener("resize", this.onResize);
     this.onResize();
-    this.createChart();
+    this.chart();
   },
   methods: {
     onResize() {
       this.size = this.$el.clientWidth;
     },
-    svg() {
-      return d3
-        .select(this.$el)
-        .select("svg")
-        .select("g");
+    svg(child) {
+      return child
+        ? d3
+            .select(this.$el)
+            .select("svg")
+            .select(child)
+        : d3.select(this.$el).select("svg");
     },
-    gradId(d) {
-      return `linkGrad-${d.source.index}-${d.target.index}`;
+    genId(d) {
+      return `id-${d.source.index}-${d.target.index}`;
     },
     ribbon() {
-      return d3.ribbon().radius(this.chartWidth / 2 - this.margins.chord);
+      return d3.ribbon().radius(this.chartSize / 2 - this.margins.chord);
     },
     arc() {
       return d3
@@ -86,21 +89,24 @@ export default {
         .innerRadius(this.chartSize / 2 - this.margins.chord)
         .outerRadius(this.chartSize / 2);
     },
-    createChart() {
-      this.svg()
-        .selectAll("*")
-        .remove();
-
-      let grads = this.svg()
-        .append("defs")
+    grads() {
+      const grads = this.svg("defs")
         .selectAll("linearGradient")
-        .data(this.dataChord)
+        .data(this.dataChord, this.genId);
+
+      grads.exit().remove();
+
+      grads.selectAll("stop").remove();
+
+      grads
         .enter()
         .append("linearGradient")
         //Create the unique ID for this specific source-target pairing
-        .attr("id", this.gradId)
+
         .attr("gradientUnits", "userSpaceOnUse")
         //Find the location where the source chord starts
+        .merge(grads)
+        .attr("id", this.genId)
         .attr("x1", d => {
           return (
             this.innerRadius *
@@ -162,30 +168,30 @@ export default {
           //   d.target.index}, 50%, 50%)`;
           return this.labels[d.target.index].color;
         });
-
-      // RIBBON
-
-      const ribbon = d3
-        .ribbon()
-        .radius(this.chartSize / 2 - this.margins.chord);
-
-      const ribbons = this.svg()
+    },
+    ribbons() {
+      const ribbons = this.svg("g")
         .selectAll("g.ribbon")
-        .data(this.dataChord)
+        .data(this.dataChord, this.genId);
+
+      ribbons.exit().remove();
+
+      ribbons.selectAll("path").remove();
+
+      ribbons
         .enter()
         .append("g")
         .attr("class", "ribbon")
         .attr(
           "transform",
           `translate(${this.chartSize / 2}, ${this.chartSize / 2})`
-        );
-
-      ribbons
+        )
+        .merge(ribbons)
         .append("path")
-        .attr("d", ribbon)
+        .attr("d", this.ribbon())
         // determine the fill on the basis of the source object of each node
         .style("fill", d => {
-          return "url(#" + this.gradId(d) + ")";
+          return "url(#" + this.genId(d) + ")";
         })
         // on hover increase the opacity of the ribbon
         .attr("opacity", 0.4)
@@ -205,23 +211,33 @@ export default {
 
           this.tooltipText = "";
         });
-
-      const arcs = this.svg()
+    },
+    arcs() {
+      const arcs = this.svg("g")
         .selectAll("g.arc")
-        .data(this.dataChord.groups)
+        .data(this.dataChord.groups, d => `id-${d.index}-${d.value}`);
+
+      arcs.exit().remove();
+
+      arcs.selectAll("path").remove();
+
+      arcs
         .enter()
         .append("g")
         .attr("class", "arc")
         .attr(
           "transform",
           `translate(${this.chartSize / 2}, ${this.chartSize / 2})`
-        );
-
-      arcs
+        )
+        .merge(arcs)
         .append("path")
         .attr("d", this.arc())
         .attr("fill", (d, i) => this.labels[i].color);
-
+    },
+    chart() {
+      this.grads();
+      this.ribbons();
+      this.arcs();
       // const text = this.svg()
       //   .selectAll("g.text")
       //   .data(this.dataChord.groups)
