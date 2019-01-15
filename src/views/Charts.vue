@@ -1,31 +1,25 @@
 <template>
-  <div class="charts">
-    <div class="md-layout md-gutter">
-      <div
-        class="md-layout-item md-size-50 md-xsmall-size-100 md-small-size-100 chart-card-container"
-      >
-        <md-card>
-          <md-card-content>
-            <bubble-chart v-bind:data-arr="bubbleData"></bubble-chart>
-          </md-card-content>
-        </md-card>
-      </div>
-      <div
-        class="md-layout-item md-size-50 md-xsmall-size-100 md-small-size-100 chart-card-container"
-      >
-        <md-card>
-          <md-card-content>
-            <chord-chart v-bind:data-arr="chordData" v-bind:labels="chordLabels"></chord-chart>
-          </md-card-content>
-        </md-card>
-      </div>
-      <div class="md-layout-item md-size-100 chart-card-container">
-        <md-card>
-          <md-card-content>
-            <bar-chart></bar-chart>
-          </md-card-content>
-        </md-card>
-      </div>
+  <div class="md-layout md-gutter">
+    <div class="md-layout-item md-size-50 chart-card-container">
+      <md-card>
+        <md-card-content>
+          <bubble-chart v-bind:data-arr="bubbleData"></bubble-chart>
+        </md-card-content>
+      </md-card>
+    </div>
+    <div class="md-layout-item md-size-50 chart-card-container">
+      <md-card>
+        <md-card-content>
+          <chord-chart v-bind:data-arr="chordData" v-bind:labels="chordLabels"></chord-chart>
+        </md-card-content>
+      </md-card>
+    </div>
+    <div class="md-layout-item md-size-100 chart-card-container">
+      <md-card>
+        <md-card-content>
+          <bar-chart></bar-chart>
+        </md-card-content>
+      </md-card>
     </div>
   </div>
 </template>
