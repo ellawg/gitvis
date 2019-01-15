@@ -3,10 +3,10 @@
     <div class="md-layout-item md-size-100" v-if="$apollo.loading">Loading</div>
     <div class="md-layout-item" v-else>
       <charts
-        v-bind:bubble-data="topics"
-        v-bind:chord-data="chordData"
-        v-bind:bar-data="repos"
-        v-bind:chord-labels="languages"
+        :bubble-data="topics"
+        :chord-data="chordData"
+        :bar-data="repos"
+        :chord-labels="languages"
       ></charts>
     </div>
   </div>

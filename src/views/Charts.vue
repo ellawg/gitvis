@@ -3,14 +3,14 @@
     <div class="md-layout-item md-size-50 chart-card-container">
       <md-card>
         <md-card-content>
-          <bubble-chart v-bind:data-arr="bubbleData"></bubble-chart>
+          <bubble-chart :data-arr="bubbleData"></bubble-chart>
         </md-card-content>
       </md-card>
     </div>
     <div class="md-layout-item md-size-50 chart-card-container">
       <md-card>
         <md-card-content>
-          <chord-chart v-bind:data-arr="chordData" v-bind:labels="chordLabels"></chord-chart>
+          <chord-chart :data-arr="chordData" :labels="chordLabels"></chord-chart>
         </md-card-content>
       </md-card>
     </div>
@@ -31,13 +31,18 @@ import ChordChart from "@/components/ChordChart.vue";
 import BarChart from "@/components/BarChart.vue";
 
 export default {
-  name: "charts",
+  name: "Charts",
   components: {
     BubbleChart,
     ChordChart,
     BarChart
   },
-  props: ["bubbleData", "chordData", "barData", "chordLabels"]
+  props: {
+    bubbleData: { type: Array, default: () => [] },
+    chordData: { type: Array, default: () => [] },
+    chordLabels: { type: Array, default: () => [] },
+    barData: { type: Array, default: () => [] }
+  }
 };
 </script>
 

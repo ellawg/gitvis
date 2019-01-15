@@ -14,7 +14,10 @@ import * as d3 from "d3";
 
 export default {
   name: "ChordChart",
-  props: ["dataArr", "labels"],
+  props: {
+    dataArr: { type: Array, default: [] },
+    labels: { type: Array, default: [] }
+  },
   data() {
     return {
       tooltipText: "",
@@ -62,7 +65,7 @@ export default {
     this.createChart();
   },
   methods: {
-    onResize(e) {
+    onResize() {
       this.size = this.$el.clientWidth;
     },
     svg() {
@@ -144,7 +147,7 @@ export default {
       grads
         .append("stop")
         .attr("offset", "0%")
-        .attr("stop-color", (d, i) => {
+        .attr("stop-color", d => {
           // return `hsl(${(360 / this.dataChord.groups.length) *
           //   d.source.index}, 50%, 50%)`;
           return this.labels[d.source.index].color;
@@ -154,7 +157,7 @@ export default {
       grads
         .append("stop")
         .attr("offset", "100%")
-        .attr("stop-color", (d, i) => {
+        .attr("stop-color", d => {
           // return `hsl(${(360 / this.dataChord.groups.length) *
           //   d.target.index}, 50%, 50%)`;
           return this.labels[d.target.index].color;
