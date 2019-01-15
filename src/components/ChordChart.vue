@@ -74,9 +74,6 @@ export default {
     gradId(d) {
       return `linkGrad-${d.source.index}-${d.target.index}`;
     },
-    createGrads(enter) {
-      return enter;
-    },
     ribbon() {
       return d3.ribbon().radius(this.chartWidth / 2 - this.margins.chord);
     },
@@ -148,8 +145,9 @@ export default {
         .append("stop")
         .attr("offset", "0%")
         .attr("stop-color", (d, i) => {
-          return `hsl(${(360 / this.dataChord.groups.length) *
-            d.source.index}, 50%, 50%)`;
+          // return `hsl(${(360 / this.dataChord.groups.length) *
+          //   d.source.index}, 50%, 50%)`;
+          return this.labels[d.source.index].color;
         });
 
       //Set the ending color (at 100%)
@@ -157,8 +155,9 @@ export default {
         .append("stop")
         .attr("offset", "100%")
         .attr("stop-color", (d, i) => {
-          return `hsl(${(360 / this.dataChord.groups.length) *
-            d.target.index}, 50%, 50%)`;
+          // return `hsl(${(360 / this.dataChord.groups.length) *
+          //   d.target.index}, 50%, 50%)`;
+          return this.labels[d.target.index].color;
         });
 
       // RIBBON
@@ -218,10 +217,7 @@ export default {
       arcs
         .append("path")
         .attr("d", this.arc())
-        .attr(
-          "fill",
-          d => `hsl(${(360 / this.dataChord.groups.length) * d.index},50%, 50%)`
-        );
+        .attr("fill", (d, i) => this.labels[i].color);
 
       // const text = this.svg()
       //   .selectAll("g.text")
