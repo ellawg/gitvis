@@ -2,6 +2,9 @@
   <div class="md-layout md-gutter">
     <div class="md-layout-item md-size-50 chart-card-container">
       <md-card>
+        <md-card-header>
+          <div class="md-title">Topics</div>
+        </md-card-header>
         <md-card-content>
           <bubble-chart :data-arr="bubbleData"></bubble-chart>
         </md-card-content>
@@ -9,6 +12,9 @@
     </div>
     <div class="md-layout-item md-size-50 chart-card-container">
       <md-card>
+        <md-card-header>
+          <div class="md-title">Languages</div>
+        </md-card-header>
         <md-card-content>
           <chord-chart :data-arr="chordData" :labels="chordLabels"></chord-chart>
         </md-card-content>
@@ -16,6 +22,9 @@
     </div>
     <div class="md-layout-item md-size-100 chart-card-container">
       <md-card>
+        <md-card-header>
+          <div class="md-title">Repositories</div>
+        </md-card-header>
         <md-card-content>
           <bar-chart></bar-chart>
         </md-card-content>

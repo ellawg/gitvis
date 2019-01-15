@@ -3,6 +3,9 @@
     <div id="search" class="md-layout-item md-size-100 md-layout md-gutter">
       <div class="md-layout-item">
         <md-card>
+          <md-card-header>
+            <div class="md-title">Search</div>
+          </md-card-header>
           <md-card-content>
             <form form novalidate @submit.prevent="submit">
               <div class="md-layout">
