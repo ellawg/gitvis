@@ -25,7 +25,6 @@ let unsubscribe;
 export default {
   name: "Navbar",
   mounted() {
-    console.log(this.$el); // TODO: This is a good way to find the svg.
     unsubscribe = auth.onAuthStateChanged(user => {
       if (user) {
         // If the user is logged in
