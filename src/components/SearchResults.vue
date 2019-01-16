@@ -1,7 +1,14 @@
 <template>
-  <div>
-    <div v-if="$apollo.loading">Loading</div>
-    <div v-else>{{languages}}</div>
+  <div class="md-layout-item md-size-100 md-gutter md-layout">
+    <div class="md-layout-item md-size-100" v-if="$apollo.loading">Loading</div>
+    <div class="md-layout-item" v-else>
+      <charts
+        :bubble-data="topics"
+        :chord-data="chordData"
+        :bar-data="repos"
+        :chord-labels="languages"
+      ></charts>
+    </div>
   </div>
 </template>
 
@@ -14,8 +21,11 @@ import {
   repos
 } from "../utils/dataMassage.js";
 
+import Charts from "../views/Charts.vue";
+
 export default {
   name: "SearchResults",
+  components: { Charts },
   props: {
     query: { type: String, default: "" }
   },

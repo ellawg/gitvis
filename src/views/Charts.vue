@@ -1,15 +1,34 @@
 <template>
-  <div class="charts">
-    <div class="md-layout">
-      <div class="md-layout-item">
-        <bubble-chart v-bind:data-arr="bubbleData"></bubble-chart>
-      </div>
-      <div class="md-layout-item">
-        <chord-chart v-bind:data-arr="chordData"></chord-chart>
-      </div>
-       <div class="md-layout-item">
-        <bar-chart></bar-chart>
-      </div>
+  <div class="md-layout md-gutter">
+    <div class="md-layout-item md-size-50 chart-card-container">
+      <md-card>
+        <md-card-header>
+          <div class="md-title">Topics</div>
+        </md-card-header>
+        <md-card-content>
+          <bubble-chart :data-arr="bubbleData"></bubble-chart>
+        </md-card-content>
+      </md-card>
+    </div>
+    <div class="md-layout-item md-size-50 chart-card-container">
+      <md-card>
+        <md-card-header>
+          <div class="md-title">Languages</div>
+        </md-card-header>
+        <md-card-content>
+          <chord-chart :data-arr="chordData" :labels="chordLabels"></chord-chart>
+        </md-card-content>
+      </md-card>
+    </div>
+    <div class="md-layout-item md-size-100 chart-card-container">
+      <md-card>
+        <md-card-header>
+          <div class="md-title">Repositories</div>
+        </md-card-header>
+        <md-card-content>
+          <bar-chart></bar-chart>
+        </md-card-content>
+      </md-card>
     </div>
   </div>
 </template>
@@ -19,17 +38,25 @@
 import BubbleChart from "@/components/BubbleChart.vue";
 import ChordChart from "@/components/ChordChart.vue";
 import BarChart from "@/components/BarChart.vue";
-import { bubbleData, chordData } from "../utils/mockData.js";
 
 export default {
-  name: "charts",
+  name: "Charts",
   components: {
     BubbleChart,
     ChordChart,
     BarChart
   },
-  data: function() {
-    return { bubbleData, chordData };
+  props: {
+    bubbleData: { type: Array, default: () => [] },
+    chordData: { type: Array, default: () => [] },
+    chordLabels: { type: Array, default: () => [] },
+    barData: { type: Array, default: () => [] }
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.chart-card-container {
+  margin-top: 24px;
+}
+</style>

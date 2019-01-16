@@ -1,13 +1,9 @@
 <template>
   <div id="app">
-    <md-app md-waterfall md-mode="fixed">
-      <md-app-toolbar>
-        <Nav/>
-      </md-app-toolbar>
-      <md-app-content>
-        <router-view/>
-      </md-app-content>
-    </md-app>
+    <Nav/>
+    <main id="main">
+      <router-view/>
+    </main>
   </div>
 </template>
 
@@ -30,10 +26,14 @@ export default {
   "default",
   (
     primary: md-get-palette-color(blue, A200),
-    // The primary color of your application
-      accent: md-get-palette-color(red, A200)// The accent or secondary color
+    accent: md-get-palette-color(red, A200),
+    theme: dark
   )
 );
 
 @import "~vue-material/dist/theme/all"; // Apply the theme
+
+#main {
+  margin: 24px 2%;
+}
 </style>
