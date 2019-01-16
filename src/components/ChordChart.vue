@@ -1,6 +1,6 @@
 <template>
   <div class="chord-chart">
-    <svg class="chord-chart-svg" :width="size" :height="size">
+    <svg class="chord-chart-svg" :viewBox="`0 0 ${size} ${size}`">
       <defs></defs>
       <g :transform="`translate(${margins.chart}, ${margins.chart})`"></g>
     </svg>
@@ -185,11 +185,11 @@ export default {
         .enter()
         .append("g")
         .attr("class", "ribbon")
+        .merge(ribbons)
         .attr(
           "transform",
           `translate(${this.chartSize / 2}, ${this.chartSize / 2})`
         )
-        .merge(ribbons)
         .append("path")
         .attr("d", this.ribbon())
         // determine the fill on the basis of the source object of each node
@@ -228,11 +228,11 @@ export default {
         .enter()
         .append("g")
         .attr("class", "arc")
+        .merge(arcs)
         .attr(
           "transform",
           `translate(${this.chartSize / 2}, ${this.chartSize / 2})`
         )
-        .merge(arcs)
         .append("path")
         .attr("d", this.arc())
         .attr("fill", (d, i) => this.labels[i].color);

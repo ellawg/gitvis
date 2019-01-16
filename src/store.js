@@ -55,7 +55,6 @@ export default new Vuex.Store({
       } catch (error) {
         // TODO: Handle error
         console.log("signin error: ", error.message);
-        return;
       }
       if (result.credential.accessToken) {
         await onLogin(apolloClient, result.credential.accessToken);
@@ -70,7 +69,6 @@ export default new Vuex.Store({
       } catch (error) {
         // TODO: Handle error
         console.log("signout error: ", error.message);
-        return;
       }
       commit(SET_LOADING, { name: "logout", loading: false });
     }
