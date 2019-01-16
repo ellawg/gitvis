@@ -197,23 +197,41 @@ export default {
           return "url(#" + this.genId(d) + ")";
         })
         // on hover increase the opacity of the ribbon
-        .attr("opacity", 0.4)
-        .on("mouseenter", (d, i, nodes) => {
-          d3.select(nodes[i])
-            .transition()
-            .attr("opacity", 1);
+        .attr("opacity", 0.4);
+      // .on("mouseenter", (d, i, nodes) => {
+      //   d3.select(nodes[i])
+      //     //.transition()
+      //     //.attr("opacity", 1);
 
-          this.tooltipText = `${this.labels[d.source.index].name} - ${
-            this.labels[d.target.index].name
-          }`;
-        })
-        .on("mouseout", (d, i, nodes) => {
-          d3.select(nodes[i])
-            .transition()
-            .attr("opacity", 0.4);
+      //   this.tooltipText = `${this.labels[d.source.index].name} - ${
+      //     this.labels[d.target.index].name
+      //   }`;
+      // })
+      // .on("mouseout", (d, i, nodes) => {
+      //   d3.select(nodes[i])
+      //     .transition()
+      //     .attr("opacity", 0.4);
 
-          this.tooltipText = "";
-        });
+      //   this.tooltipText = "";
+      // });
+    },
+    arcHover(index) {
+      const ribbons = this.svg("g")
+        .selectAll("g.ribbon")
+        .data(this.dataChord, this.genId);
+
+      ribbons
+        .selectAll("path")
+        .attr("opacity", d =>
+          d.source.index === index || d.target.index === index ? 1 : 0.1
+        );
+    },
+    arcHoverOut() {
+      const ribbons = this.svg("g")
+        .selectAll("g.ribbon")
+        .data(this.dataChord, this.genId);
+
+      ribbons.selectAll("path").attr("opacity", 0.4);
     },
     arcs() {
       const arcs = this.svg("g")
@@ -235,7 +253,15 @@ export default {
         .merge(arcs)
         .append("path")
         .attr("d", this.arc())
-        .attr("fill", (d, i) => this.labels[i].color);
+        .attr("fill", (d, i) => this.labels[i].color)
+        .on("mouseenter", (d, i) => {
+          this.arcHover(i);
+          this.tooltipText = `${this.labels[i].name}`;
+        })
+        .on("mouseout", (d, i) => {
+          this.arcHoverOut();
+          this.tooltipText = "";
+        });
     },
     text() {
       const text = this.svg("g")
