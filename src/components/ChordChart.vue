@@ -157,8 +157,6 @@ export default {
         .append("stop")
         .attr("offset", "0%")
         .attr("stop-color", d => {
-          // return `hsl(${(360 / this.dataChord.groups.length) *
-          //   d.source.index}, 50%, 50%)`;
           return this.labels[d.source.index].color;
         });
 
@@ -167,8 +165,6 @@ export default {
         .append("stop")
         .attr("offset", "100%")
         .attr("stop-color", d => {
-          // return `hsl(${(360 / this.dataChord.groups.length) *
-          //   d.target.index}, 50%, 50%)`;
           return this.labels[d.target.index].color;
         });
     },
@@ -198,40 +194,21 @@ export default {
         })
         // on hover increase the opacity of the ribbon
         .attr("opacity", 0.4);
-      // .on("mouseenter", (d, i, nodes) => {
-      //   d3.select(nodes[i])
-      //     //.transition()
-      //     //.attr("opacity", 1);
-
-      //   this.tooltipText = `${this.labels[d.source.index].name} - ${
-      //     this.labels[d.target.index].name
-      //   }`;
-      // })
-      // .on("mouseout", (d, i, nodes) => {
-      //   d3.select(nodes[i])
-      //     .transition()
-      //     .attr("opacity", 0.4);
-
-      //   this.tooltipText = "";
-      // });
     },
     arcHover(index) {
-      const ribbons = this.svg("g")
+      this.svg("g")
         .selectAll("g.ribbon")
-        .data(this.dataChord, this.genId);
-
-      ribbons
+        .data(this.dataChord, this.genId)
         .selectAll("path")
         .attr("opacity", d =>
           d.source.index === index || d.target.index === index ? 1 : 0.1
         );
     },
     arcHoverOut() {
-      const ribbons = this.svg("g")
+      this.svg("g")
         .selectAll("g.ribbon")
-        .data(this.dataChord, this.genId);
-
-      ribbons.selectAll("path").attr("opacity", 0.4);
+        .selectAll("path")
+        .attr("opacity", 0.4);
     },
     arcs() {
       const arcs = this.svg("g")
@@ -256,57 +233,17 @@ export default {
         .attr("fill", (d, i) => this.labels[i].color)
         .on("mouseenter", (d, i) => {
           this.arcHover(i);
-          this.tooltipText = `${this.labels[i].name}`;
+          this.tooltipText = this.labels[i].name;
         })
-        .on("mouseout", (d, i) => {
+        .on("mouseout", () => {
           this.arcHoverOut();
           this.tooltipText = "";
         });
-    },
-    text() {
-      const text = this.svg("g")
-        .selectAll("g.text")
-        .data(this.dataChord.groups, this.groupsGenId);
-
-      text.exit().remove();
-
-      text.selectAll("text").remove();
-
-      text
-        .enter()
-        .append("g")
-        .attr("class", "text")
-        .attr(
-          "transform",
-          `translate(${this.chartSize / 2}, ${this.chartSize / 2})`
-        )
-        .merge(text)
-        .append("text")
-        .text((d, i) => this.labels[i].name)
-        .attr("font-weight", "bold")
-        .attr("text-anchor", "middle")
-        .attr("alignment-baseline", "middle")
-        .style("pointer-events", "none")
-        // detail a text shadow matching the color of the respective arc
-        .style("text-shadow", (d, i) => {
-          const color = this.labels[i].color;
-          return `1px 1px ${color}, -1px -1px ${color}, 1px -1px ${color}, -1px 1px ${color}`;
-        })
-        .attr("fill", "#fff")
-        .attr(
-          "transform",
-          d =>
-            `rotate(${(((d.endAngle + d.startAngle) / 2) * 180) /
-              Math.PI}) translate(0, ${-this.chartSize /
-              2}) rotate(-${(((d.endAngle + d.startAngle) / 2) * 180) /
-              Math.PI})`
-        );
     },
     chart() {
       this.grads();
       this.ribbons();
       this.arcs();
-      // this.text();
     }
   }
 };
