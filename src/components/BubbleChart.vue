@@ -1,58 +1,98 @@
 <template>
-  <div id="bchart"></div>
+  <div class="bubble-chart">
+    <svg :viewBox="`0 0 ${size} ${size}`">
+      <g :transform="`translate(${size/2}, ${size/2})`"></g>
+    </svg>
+    <div class="bubble-tooltip-container">
+      <p>{{tooltipText}}</p>
+    </div>
+  </div>
 </template>
 
 <script>
 import * as d3 from "d3";
+import { mapActions } from "vuex";
+
 import ColorLuminance from "../utils/colorLuminance.js";
 
 export default {
   name: "BubbleChart",
-  mounted: function() {
-    this.bubbleChart();
+  mounted() {
+    window.addEventListener("resize", this.onResize);
+    this.onResize();
+    this.chart();
   },
-  props: ["dataArr"],
+  props: {
+    dataArr: { type: Array, default: () => [] }
+  },
+  data() {
+    return {
+      size: 500,
+      margin: 24,
+      tooltipText: ""
+    };
+  },
+  watch: {
+    size() {
+      this.chart();
+    },
+    dataArr() {
+      this.chart();
+    }
+  },
+  computed: {
+    maxCount() {
+      return this.dataArr.reduce(
+        (acc, { count }) => (acc > count ? acc : count),
+        0
+      );
+    }
+  },
   methods: {
-    bubbleChart() {
-      let width = 500;
-      let height = 500;
-
-      const chart = d3.select("#bchart");
-
-      const svg = chart
-        .append("svg")
-        .attr("width", width)
-        .attr("height", height)
-        .append("g")
-        .attr("transform", "translate(" + [width / 2, height / 2] + ")");
-
-      const tooltip = chart.append("div").attr("id", "bc-tooltip");
-
-      const circles = svg
+    ...mapActions(["filterToggle"]),
+    svg(child) {
+      const svg = d3.select(this.$el).select("svg");
+      return child ? svg.select(child) : svg;
+    },
+    onResize() {
+      this.size = this.$el.clientWidth;
+    },
+    calcSize({ count }) {
+      const relSize = count / this.maxCount;
+      return relSize * this.size * 0.2;
+    },
+    chart() {
+      const circles = this.svg("g")
         .selectAll(".bc-circle")
-        .data(this.dataArr)
+        .data(this.dataArr);
+
+      circles.exit().remove();
+
+      circles
         .enter()
         .append("circle")
         .attr("class", "bc-circle")
-        .attr("r", d => d.count)
-        .style("fill", d => d.color)
-        .on("mouseover", function(d) {
-          d3.select(this).style("fill", ColorLuminance(d.color, -0.3));
-          tooltip.style("visibility", "visible").text(d.name);
+        .attr("r", this.calcSize)
+        .style("fill", d => "blue") //TODO: Fix color
+        .on("mouseover", ({ name, color }, i, nodes) => {
+          this.tooltipText = name;
+          d3.select(nodes[i]).style("fill", ColorLuminance(color, -0.3));
         })
-        .on("mouseout", function(d) {
-          tooltip.style("visibility", "hidden").text("");
-          d3.select(this).style("fill", d.color);
+        .on("mouseout", (d, i, nodes) => {
+          this.tooltipText = "";
+          d3.select(nodes[i]).style("fill", "blue");
+        })
+        .on("click", ({ name }) => {
+          this.filterToggle({ type: "topics", value: name });
         });
 
       const simulation = d3
         .forceSimulation()
-        .force("charge", d3.forceManyBody().strength([10]))
-        .force("center", d3.forceCenter(width/20, height/20))
-        .force('collision', d3.forceCollide().radius(function(d) {
-    return d.count}))
-        //.force("x", d3.forceX().strength(0.15))
-        //.force("y", d3.forceY().strength(0.15));
+        .force("charge", d3.forceManyBody().strength(1))
+        .force("center", d3.forceCenter(this.size / 20, this.size / 20))
+        .force("collision", d3.forceCollide().radius(this.calcSize));
+      //.force("x", d3.forceX().strength(0.15))
+      //.force("y", d3.forceY().strength(0.15));
 
       simulation.nodes(this.dataArr).on("tick", ticked);
 
@@ -65,12 +105,23 @@ export default {
 </script>
 
 <style lang="scss">
-#bc-tooltip {
-  display: flex;
-  z-index: 10;
-  visibility: hidden;
-  color: #303950;
-  transition: all 0.2s ease-out;
+.bubble-tooltip-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  text-align: start;
+}
+
+.bubble-chart {
+  position: relative;
+  width: 100%;
+  line-height: 2;
+}
+
+p {
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
 }
 
 .bc-circle {
