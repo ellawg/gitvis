@@ -18,8 +18,10 @@ import {
   topics,
   languages,
   formatChordData,
-  repos
+  repos,
+  filter
 } from "../utils/dataMassage.js";
+import { mapState } from "vuex";
 
 import Charts from "../views/Charts.vue";
 
@@ -31,19 +33,26 @@ export default {
   },
   data() {
     return {
-      minCount: 2,
       search: {}
     };
   },
   computed: {
+    ...mapState({
+      langFilters: state => state.filters.languages,
+      topicFilters: state => state.filters.topics,
+      minCount: state => state.minCount
+    }),
+    filteredSearch() {
+      return filter(this.search, this.langFilters, this.topicFilters);
+    },
     languages() {
-      return languages(this.search, this.minCount);
+      return languages(this.filteredSearch, this.minCount);
     },
     topics() {
-      return topics(this.search, this.minCount);
+      return topics(this.filteredSearch, this.minCount);
     },
     repos() {
-      return repos(this.search);
+      return repos(this.filteredSearch);
     },
     chordData() {
       return formatChordData(this.languages);

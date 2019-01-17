@@ -18,6 +18,7 @@ export default new Vuex.Store({
   state: {
     auth: false,
     user: null,
+    minCount: 1,
     filters: {
       languages: [],
       topics: []
