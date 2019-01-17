@@ -21,14 +21,7 @@
       </md-card>
     </div>
     <div class="md-layout-item md-size-100 chart-card-container">
-      <md-card>
-        <md-card-header>
-          <div class="md-title">Repositories</div>
-        </md-card-header>
-        <md-card-content>
-          <bar-chart></bar-chart>
-        </md-card-content>
-      </md-card>
+      <repo-table :repo-data="repoData"></repo-table>
     </div>
   </div>
 </template>
@@ -37,20 +30,20 @@
 // @ is an alias to /src
 import BubbleChart from "@/components/BubbleChart.vue";
 import ChordChart from "@/components/ChordChart.vue";
-import BarChart from "@/components/BarChart.vue";
+import RepoTable from "@/components/RepoTable.vue";
 
 export default {
   name: "Charts",
   components: {
     BubbleChart,
     ChordChart,
-    BarChart
+    RepoTable
   },
   props: {
     bubbleData: { type: Array, default: () => [] },
     chordData: { type: Array, default: () => [] },
     chordLabels: { type: Array, default: () => [] },
-    barData: { type: Array, default: () => [] }
+    repoData: { type: Array, default: () => [] }
   }
 };
 </script>

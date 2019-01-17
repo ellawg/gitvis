@@ -5,7 +5,7 @@
       <charts
         :bubble-data="topics"
         :chord-data="chordData"
-        :bar-data="repos"
+        :repo-data="repos"
         :chord-labels="languages"
       ></charts>
     </div>
