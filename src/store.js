@@ -7,7 +7,9 @@ import {
   SET_AUTH,
   SET_USER,
   SET_LOADING,
-  SET_INITIALIZED
+  SET_INITIALIZED,
+  ADD_FILTER,
+  REMOVE_FILTER
 } from "./utils/mutations";
 
 Vue.use(Vuex);
@@ -16,6 +18,10 @@ export default new Vuex.Store({
   state: {
     auth: false,
     user: null,
+    filters: {
+      languages: [],
+      topics: []
+    },
     loading: {
       login: false,
       logout: false
@@ -44,9 +50,25 @@ export default new Vuex.Store({
     },
     [SET_INITIALIZED](state, bool) {
       state.initialized = bool;
+    },
+    [ADD_FILTER](state, { type, value }) {
+      if (state.filters[type].length >= 3) {
+        state.filters[type].splice(0, 1);
+      }
+      state.filters[type].push(value);
+    },
+    [REMOVE_FILTER](state, { type, value }) {
+      state.filters[type] = state.filters[type].filter(name => name !== value);
     }
   },
   actions: {
+    filterToggle({ commit, state }, { type, value }) {
+      if (state.filters[type].includes(value)) {
+        commit(REMOVE_FILTER, { type, value });
+      } else {
+        commit(ADD_FILTER, { type, value });
+      }
+    },
     async githubLogin({ commit }, apolloClient) {
       commit(SET_LOADING, { name: "login", loading: true });
       let result;

@@ -16,8 +16,24 @@
                   </md-field>
                 </div>
                 <div class="md-layout-item md-size-50">Slider</div>
-                <div class="md-layout-item md-size-50">Languages topics</div>
-                <div class="md-layout-item md-size-50">Topics</div>
+                <div class="md-layout-item md-size-50">
+                  <md-chip
+                    v-for="topic in topics"
+                    :key="topic"
+                    class="md-accent"
+                    md-deletable
+                    @md-delete="filterToggle({type: 'topics', value: topic})"
+                  >{{topic}}</md-chip>
+                </div>
+                <div class="md-layout-item md-size-50">
+                  <md-chip
+                    v-for="lang in languages"
+                    :key="lang"
+                    class="md-primary"
+                    md-deletable
+                    @md-delete="filterToggle({type: 'languages', value: lang})"
+                  >{{lang}}</md-chip>
+                </div>
               </div>
             </form>
           </md-card-content>
@@ -29,6 +45,8 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
+
 export default {
   name: "Search",
   data() {
@@ -36,7 +54,14 @@ export default {
       query: ""
     };
   },
+  computed: {
+    ...mapState({
+      languages: state => state.filters.languages,
+      topics: state => state.filters.topics
+    })
+  },
   methods: {
+    ...mapActions(["filterToggle"]),
     submit() {
       this.$router.push("/search/" + this.query);
     }

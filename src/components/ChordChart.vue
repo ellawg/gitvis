@@ -12,6 +12,7 @@
 
 <script>
 import * as d3 from "d3";
+import { mapActions } from "vuex";
 
 export default {
   name: "ChordChart",
@@ -66,6 +67,7 @@ export default {
     this.chart();
   },
   methods: {
+    ...mapActions(["filterToggle"]),
     onResize() {
       this.size = this.$el.clientWidth;
     },
@@ -238,6 +240,9 @@ export default {
         .on("mouseout", () => {
           this.arcHoverOut();
           this.tooltipText = "";
+        })
+        .on("click", (d, i) => {
+          this.filterToggle({ type: "languages", value: this.labels[i].name });
         });
     },
     chart() {
