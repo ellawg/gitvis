@@ -4,7 +4,7 @@
       <defs></defs>
       <g :transform="`translate(${margins.chart}, ${margins.chart})`"></g>
     </svg>
-    <div class="tooltip-container">
+    <div class="chord-tooltip-container">
       <p>{{tooltipText}}</p>
     </div>
   </div>
@@ -72,18 +72,14 @@ export default {
       this.size = this.$el.clientWidth;
     },
     svg(child) {
-      return child
-        ? d3
-            .select(this.$el)
-            .select("svg")
-            .select(child)
-        : d3.select(this.$el).select("svg");
+      const svg = d3.select(this.$el).select("svg");
+      return child ? svg.select(child) : svg;
     },
-    genId(d) {
-      return `id-${d.source.index}-${d.target.index}`;
+    genId({ source, target }) {
+      return `id-${source.index}-${target.index}`;
     },
-    groupsGenId(d) {
-      return `id-${d.index}-${d.value}`;
+    groupsGenId({ index, value }) {
+      return `id-${index}-${value}`;
     },
     ribbon() {
       return d3.ribbon().radius(this.chartSize / 2 - this.margins.chord);
@@ -254,17 +250,16 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .chord-chart {
   position: relative;
   width: 100%;
-  line-height: 2;
-  text-align: center;
 }
-.tooltip-container {
+.chord-tooltip-container {
   position: absolute;
   bottom: 0;
   right: 0;
+  z-index: -10;
   text-align: end;
 }
 p {
