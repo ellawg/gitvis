@@ -2,12 +2,12 @@
   <div class="md-layout-item md-size-100 md-gutter md-layout">
     <div class="md-layout-item md-size-100" v-if="$apollo.loading">Loading</div>
     <div class="md-layout-item" v-else>
-      <charts
+      <Charts
         :bubble-data="topics"
         :chord-data="chordData"
         :repo-data="repos"
         :chord-labels="languages"
-      ></charts>
+      ></Charts>
     </div>
   </div>
 </template>
@@ -40,7 +40,7 @@ export default {
     ...mapState({
       langFilters: state => state.filters.languages,
       topicFilters: state => state.filters.topics,
-      minCount: state => state.minCount
+      minCount: state => state.filters.minCount
     }),
     filteredSearch() {
       return filter(this.search, this.langFilters, this.topicFilters);

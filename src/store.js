@@ -9,7 +9,8 @@ import {
   SET_LOADING,
   SET_INITIALIZED,
   ADD_FILTER,
-  REMOVE_FILTER
+  REMOVE_FILTER,
+  UPDATE_MIN_COUNT
 } from "./utils/mutations";
 
 Vue.use(Vuex);
@@ -18,10 +19,10 @@ export default new Vuex.Store({
   state: {
     auth: false,
     user: null,
-    minCount: 1,
     filters: {
       languages: [],
-      topics: []
+      topics: [],
+      minCount: 1
     },
     loading: {
       login: false,
@@ -60,6 +61,9 @@ export default new Vuex.Store({
     },
     [REMOVE_FILTER](state, { type, value }) {
       state.filters[type] = state.filters[type].filter(name => name !== value);
+    },
+    [UPDATE_MIN_COUNT](state, value) {
+      state.filters.minCount = value;
     }
   },
   actions: {
