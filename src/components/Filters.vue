@@ -1,6 +1,6 @@
 <template>
   <div class="md-layout md-gutter">
-    <div class="md-layout-item md-size-100 chart-card-container">
+    <div class="md-layout-item md-size-100 filters-card-container">
       <md-card>
         <md-card-header>
           <div class="md-title">Filters</div>
@@ -17,7 +17,7 @@
               >{{topic}}</md-chip>
             </div>
             <div class="md-layout-item">
-              <Slider :min="min" :max="max" v-model="minCount"></Slider>
+              <Slider :min="min" :max="max" v-model="sliderState"></Slider>
             </div>
             <div class="md-layout-item">
               <md-chip
@@ -53,17 +53,20 @@ export default {
       max: 10
     };
   },
-  watch: {
-    minCount(count) {
-      this[UPDATE_MIN_COUNT](count);
-    }
-  },
   computed: {
     ...mapState({
       languages: state => state.filters.languages,
       topics: state => state.filters.topics,
       minCount: state => state.filters.minCount
-    })
+    }),
+    sliderState: {
+      get() {
+        return this.minCount;
+      },
+      set(value) {
+        this[UPDATE_MIN_COUNT](value);
+      }
+    }
   },
   methods: {
     ...mapActions(["filterToggle"]),
@@ -72,3 +75,8 @@ export default {
 };
 </script>
 
+<style lang="scss" scoped>
+.filters-card-container {
+  margin-top: 24px;
+}
+</style>

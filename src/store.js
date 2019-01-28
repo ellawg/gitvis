@@ -22,7 +22,7 @@ export default new Vuex.Store({
     filters: {
       languages: [],
       topics: [],
-      minCount: 1
+      minCount: "1"
     },
     loading: {
       login: false,
@@ -32,8 +32,8 @@ export default new Vuex.Store({
   },
   getters: {
     isLoading(state) {
-      return Object.values(state.loading).reduce(
-        (acc, curr) => (curr ? curr : acc)
+      return Object.values(state.loading).reduce((acc, curr) =>
+        curr ? curr : acc
       );
     }
   },
@@ -63,6 +63,7 @@ export default new Vuex.Store({
       state.filters[type] = state.filters[type].filter(name => name !== value);
     },
     [UPDATE_MIN_COUNT](state, value) {
+      console.log(value);
       state.filters.minCount = value;
     }
   },
