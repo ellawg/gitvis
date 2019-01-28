@@ -63,7 +63,6 @@ export default new Vuex.Store({
       state.filters[type] = state.filters[type].filter(name => name !== value);
     },
     [UPDATE_MIN_COUNT](state, value) {
-      console.log(value);
       state.filters.minCount = value;
     }
   },

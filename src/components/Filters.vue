@@ -7,26 +7,29 @@
         </md-card-header>
         <md-card-content>
           <div class="md-layout">
-            <div class="md-layout-item">
-              <md-chip
-                v-for="topic in topics"
-                :key="topic"
-                class="md-accent"
-                md-deletable
-                @md-delete="filterToggle({type: 'topics', value: topic})"
-              >{{topic}}</md-chip>
-            </div>
-            <div class="md-layout-item">
-              <Slider :min="min" :max="max" v-model="sliderState"></Slider>
-            </div>
-            <div class="md-layout-item">
-              <md-chip
-                v-for="lang in languages"
-                :key="lang"
-                class="md-primary"
-                md-deletable
-                @md-delete="filterToggle({type: 'languages', value: lang})"
-              >{{lang}}</md-chip>
+            <div class="md-layout-item md-layout md-gutter">
+              <div class="slider-container md-layout-item md-size-100">
+                <Slider label="min count" :min="min" :max="max" v-model="sliderState"></Slider>
+              </div>
+              <div class="md-layout-item">
+                <md-chip
+                  v-for="topic in topics"
+                  :key="topic"
+                  class="md-accent"
+                  md-deletable
+                  @md-delete="filterToggle({type: 'topics', value: topic})"
+                >{{topic}}</md-chip>
+              </div>
+
+              <div class="md-layout-item">
+                <md-chip
+                  v-for="lang in languages"
+                  :key="lang"
+                  class="md-primary"
+                  md-deletable
+                  @md-delete="filterToggle({type: 'languages', value: lang})"
+                >{{lang}}</md-chip>
+              </div>
             </div>
           </div>
         </md-card-content>
@@ -78,5 +81,8 @@ export default {
 <style lang="scss" scoped>
 .filters-card-container {
   margin-top: 24px;
+}
+.slider-container {
+  margin-bottom: 24px;
 }
 </style>
