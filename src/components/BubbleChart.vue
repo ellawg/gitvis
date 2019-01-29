@@ -13,13 +13,12 @@
 import {
   select,
   forceSimulation,
-  forceX,
-  forceY,
+  forceCenter,
   forceCollide,
   forceManyBody,
   scaleLog,
   scaleSequential,
-  interpolateInferno
+  interpolatePlasma
 } from "d3";
 import { mapActions } from "vuex";
 
@@ -38,7 +37,8 @@ export default {
       size: 0,
       margin: 24,
       tooltipText: "",
-      forceStrength: 0.05
+      forceStrength: 5,
+      sizeConst: 0.2
     };
   },
   watch: {
@@ -75,7 +75,7 @@ export default {
       );
     },
     maxRadius() {
-      return this.size / 10;
+      return this.size * this.sizeConst;
     }
   },
   methods: {
@@ -96,19 +96,25 @@ export default {
     colorScale({ stars }) {
       const scale = scaleSequential()
         .domain([this.minStars, this.maxStars])
-        .interpolator(interpolateInferno);
+        .interpolator(interpolatePlasma);
       return scale(stars);
     },
     chart() {
-      const circles = this.svg("g")
+      let circles = this.svg("g")
         .selectAll(".bc-circle")
-        .data(this.dataArr);
+        .data(this.dataArr, ({ id }) => id);
+
+      const simulation = forceSimulation()
+        .force("center", forceCenter())
+        .force("collision", forceCollide().radius(this.calcSize))
+        .force("charge", forceManyBody().strength(this.forceStrength));
 
       circles.exit().remove();
 
-      circles
+      circles = circles
         .enter()
         .append("circle")
+        .merge(circles)
         .attr("class", "bc-circle")
         .attr("r", this.calcSize)
         .style("fill", this.colorScale)
@@ -124,18 +130,13 @@ export default {
           this.filterToggle({ type: "topics", value: name });
         });
 
-      const simulation = forceSimulation()
-        .force("x", forceX().strength(this.forceStrength))
-        .force("y", forceY().strength(this.forceStrength))
-        // .force("center", d3.forceCenter([0, 0]).strength(this.forceStrength))
-        .force("collision", forceCollide().radius(this.calcSize))
-        .force("charge", forceManyBody().strength(5));
+      const tick = () => {
+        circles.attr("cx", ({ x }) => x).attr("cy", ({ y }) => y);
+      };
 
-      simulation.nodes(this.dataArr).on("tick", ticked);
+      simulation.nodes(this.dataArr).on("tick", tick);
 
-      function ticked() {
-        circles.attr("cx", d => d.x).attr("cy", d => d.y);
-      }
+      simulation.restart();
     }
   }
 };

@@ -155,8 +155,6 @@ const filter = ({ edges }, langFilters, topicFilters) => {
               (acc, topic) => (acc ? topicsArray.includes(topic) : acc),
               true
             );
-        console.log("hastopic", hasTopic);
-        console.log("array", topicsArray);
         return hasLang || hasTopic;
       }
     );
