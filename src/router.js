@@ -3,10 +3,9 @@ import Router from "vue-router";
 
 import Home from "./views/Home.vue";
 import Charts from "./views/Charts.vue";
+import Search from "./views/Search";
+import SearchResults from "./components/SearchResults.vue";
 import { privateRoute, publicOnly } from "./utils/routeGuards";
-
-const Search = () => import("./views/Search.vue");
-const SearchResults = () => import("./components/SearchResults.vue");
 
 Vue.use(Router);
 

@@ -33,7 +33,7 @@ const formatChordData = languages => {
   });
 };
 
-const languages = ({ edges }, minCount) => {
+const languages = (edges, minCount) => {
   const result = {};
   const count = 1;
   // Loop through repos
@@ -59,7 +59,7 @@ const languages = ({ edges }, minCount) => {
   return Object.values(result).filter(({ count }) => count >= minCount);
 };
 
-const topics = ({ edges }, minCount) => {
+const topics = (edges, minCount) => {
   const result = {};
   const count = 1;
   edges.forEach(({ node: { repositoryTopics: { edges } } }) => {
@@ -86,7 +86,6 @@ const topics = ({ edges }, minCount) => {
       }
     );
   });
-  // TODO: Should we filter here?
   return Object.values(result).filter(({ count }) => count >= minCount);
 };
 
@@ -99,7 +98,7 @@ const langSizeCalc = ({ edges, totalSize }) => {
   }));
 };
 
-const repos = ({ edges }) => {
+const repos = edges => {
   const result = [];
   edges.forEach(
     ({
@@ -125,4 +124,41 @@ const repos = ({ edges }) => {
   return result;
 };
 
-export { languages, topics, formatChordData, repos };
+const filter = ({ edges }, langFilters, topicFilters) => {
+  if (!langFilters.length && !topicFilters.length) {
+    return edges;
+  } else {
+    return edges.filter(
+      ({
+        node: {
+          languages: { edges: languages },
+          repositoryTopics: { edges: topics }
+        }
+      }) => {
+        const langsArray = languages.map(({ node: { name } }) => name);
+        const topicsArray = topics.map(
+          ({
+            node: {
+              topic: { name }
+            }
+          }) => name
+        );
+        const hasLang = !langFilters.length
+          ? false
+          : langFilters.reduce(
+              (acc, lang) => (acc ? langsArray.includes(lang) : acc),
+              true
+            );
+        const hasTopic = !topicFilters.length
+          ? false
+          : topicFilters.reduce(
+              (acc, topic) => (acc ? topicsArray.includes(topic) : acc),
+              true
+            );
+        return hasLang || hasTopic;
+      }
+    );
+  }
+};
+
+export { languages, topics, formatChordData, repos, filter };

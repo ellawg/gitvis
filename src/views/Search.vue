@@ -1,6 +1,6 @@
 <template>
   <div class="md-layout md-alignment-center-center">
-    <div id="search" class="md-layout-item md-size-100 md-layout md-gutter">
+    <div class="md-layout-item md-size-100 md-layout md-gutter">
       <div class="md-layout-item">
         <md-card>
           <md-card-header>
@@ -9,7 +9,7 @@
           <md-card-content>
             <form form novalidate @submit.prevent="submit">
               <div class="md-layout">
-                <div class="md-layout-item md-size-100 md-layout md-gutter">
+                <div class="md-layout-item md-layout md-gutter">
                   <div class="md-layout-item">
                     <md-field md-inline>
                       <label>query</label>
@@ -42,6 +42,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-</style>

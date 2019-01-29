@@ -25,8 +25,8 @@ export default {
 @include md-register-theme(
   "default",
   (
-    primary: md-get-palette-color(blue, A200),
-    accent: md-get-palette-color(red, A200),
+    primary: md-get-palette-color(orange, A200),
+    accent: md-get-palette-color(lightgreen, A200),
     theme: dark
   )
 );
