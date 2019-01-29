@@ -16,7 +16,10 @@
           <div class="md-title">Languages</div>
         </md-card-header>
         <md-card-content>
-          <chord-chart :data-arr="chordData" :labels="chordLabels"></chord-chart>
+          <chord-chart
+            :data-arr="chordData"
+            :labels="chordLabels"
+          ></chord-chart>
         </md-card-content>
       </md-card>
     </div>
@@ -27,10 +30,9 @@
 </template>
 
 <script>
-// @ is an alias to /src
-import BubbleChart from "@/components/BubbleChart.vue";
-import ChordChart from "@/components/ChordChart.vue";
-import RepoTable from "@/components/RepoTable.vue";
+import BubbleChart from "../components/BubbleChart.vue";
+import ChordChart from "../components/ChordChart.vue";
+import RepoTable from "../components/RepoTable.vue";
 
 export default {
   name: "Charts",

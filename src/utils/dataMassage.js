@@ -136,7 +136,13 @@ const filter = ({ edges }, langFilters, topicFilters) => {
         }
       }) => {
         const langsArray = languages.map(({ node: { name } }) => name);
-        const topicsArray = topics.map(({ topic: name }) => name);
+        const topicsArray = topics.map(
+          ({
+            node: {
+              topic: { name }
+            }
+          }) => name
+        );
         const hasLang = !langFilters.length
           ? false
           : langFilters.reduce(
@@ -149,6 +155,8 @@ const filter = ({ edges }, langFilters, topicFilters) => {
               (acc, topic) => (acc ? topicsArray.includes(topic) : acc),
               true
             );
+        console.log("hastopic", hasTopic);
+        console.log("array", topicsArray);
         return hasLang || hasTopic;
       }
     );

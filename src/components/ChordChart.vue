@@ -5,13 +5,13 @@
       <g :transform="`translate(${margins.chart}, ${margins.chart})`"></g>
     </svg>
     <div class="chord-tooltip-container">
-      <p>{{tooltipText}}</p>
+      <p>{{ tooltipText }}</p>
     </div>
   </div>
 </template>
 
 <script>
-import * as d3 from "d3";
+import { select, chord, ribbon, arc } from "d3";
 import { mapActions } from "vuex";
 
 export default {
@@ -58,7 +58,7 @@ export default {
     },
     // This creates the data for the chart
     dataChord() {
-      return d3.chord().padAngle(this.padAngle)(this.dataArr);
+      return chord().padAngle(this.padAngle)(this.dataArr);
     }
   },
   mounted() {
@@ -72,7 +72,7 @@ export default {
       this.size = this.$el.clientWidth;
     },
     svg(child) {
-      const svg = d3.select(this.$el).select("svg");
+      const svg = select(this.$el).select("svg");
       return child ? svg.select(child) : svg;
     },
     genId({ source, target }) {
@@ -82,11 +82,10 @@ export default {
       return `id-${index}-${value}`;
     },
     ribbon() {
-      return d3.ribbon().radius(this.chartSize / 2 - this.margins.chord);
+      return ribbon().radius(this.chartSize / 2 - this.margins.chord);
     },
     arc() {
-      return d3
-        .arc()
+      return arc()
         .innerRadius(this.chartSize / 2 - this.margins.chord)
         .outerRadius(this.chartSize / 2);
     },

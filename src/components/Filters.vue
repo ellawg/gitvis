@@ -9,7 +9,12 @@
           <div class="md-layout">
             <div class="md-layout-item md-layout md-gutter">
               <div class="slider-container md-layout-item md-size-100">
-                <Slider label="min count" :min="min" :max="max" v-model="sliderState"></Slider>
+                <Slider
+                  label="min count"
+                  :min="min"
+                  :max="max"
+                  v-model="sliderState"
+                ></Slider>
               </div>
               <div class="md-layout-item">
                 <md-chip
@@ -17,8 +22,9 @@
                   :key="topic"
                   class="md-accent"
                   md-deletable
-                  @md-delete="filterToggle({type: 'topics', value: topic})"
-                >{{topic}}</md-chip>
+                  @md-delete="filterToggle({ type: 'topics', value: topic })"
+                  >{{ topic }}</md-chip
+                >
               </div>
 
               <div class="md-layout-item">
@@ -27,8 +33,9 @@
                   :key="lang"
                   class="md-primary"
                   md-deletable
-                  @md-delete="filterToggle({type: 'languages', value: lang})"
-                >{{lang}}</md-chip>
+                  @md-delete="filterToggle({ type: 'languages', value: lang })"
+                  >{{ lang }}</md-chip
+                >
               </div>
             </div>
           </div>

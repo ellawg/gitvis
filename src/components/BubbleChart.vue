@@ -1,19 +1,27 @@
 <template>
   <div class="bubble-chart">
-    <svg :viewBox="`0 0 ${size} ${size}`">
-      <g :transform="`translate(${size/2}, ${size/2})`"></g>
+    <svg :width="size" :height="size" :viewBox="`0 0 ${size} ${size}`">
+      <g :transform="`translate(${size / 2}, ${size / 2})`"></g>
     </svg>
     <div class="bubble-tooltip-container">
-      <p>{{tooltipText}}</p>
+      <p>{{ tooltipText }}</p>
     </div>
   </div>
 </template>
 
 <script>
-import * as d3 from "d3";
+import {
+  select,
+  forceSimulation,
+  forceX,
+  forceY,
+  forceCollide,
+  forceManyBody,
+  scaleLog,
+  scaleSequential,
+  interpolateInferno
+} from "d3";
 import { mapActions } from "vuex";
-
-import ColorLuminance from "../utils/colorLuminance.js";
 
 export default {
   name: "BubbleChart",
@@ -27,9 +35,10 @@ export default {
   },
   data() {
     return {
-      size: 500,
+      size: 0,
       margin: 24,
-      tooltipText: ""
+      tooltipText: "",
+      forceStrength: 0.05
     };
   },
   watch: {
@@ -46,20 +55,49 @@ export default {
         (acc, { count }) => (acc > count ? acc : count),
         0
       );
+    },
+    minCount() {
+      return this.dataArr.reduce(
+        (acc, { count }) => (acc < count ? acc : count),
+        this.maxCount
+      );
+    },
+    maxStars() {
+      return this.dataArr.reduce(
+        (acc, { stars }) => (acc > stars ? acc : stars),
+        0
+      );
+    },
+    minStars() {
+      return this.dataArr.reduce(
+        (acc, { stars }) => (acc < stars ? acc : stars),
+        this.maxStars
+      );
+    },
+    maxRadius() {
+      return this.size / 10;
     }
   },
   methods: {
     ...mapActions(["filterToggle"]),
     svg(child) {
-      const svg = d3.select(this.$el).select("svg");
+      const svg = select(this.$el).select("svg");
       return child ? svg.select(child) : svg;
     },
     onResize() {
       this.size = this.$el.clientWidth;
     },
     calcSize({ count }) {
-      const relSize = count / this.maxCount;
-      return relSize * this.size * 0.2;
+      const scale = scaleLog()
+        .domain([this.minCount, this.maxCount])
+        .range([5, this.maxRadius]);
+      return scale(count);
+    },
+    colorScale({ stars }) {
+      const scale = scaleSequential()
+        .domain([this.minStars, this.maxStars])
+        .interpolator(interpolateInferno);
+      return scale(stars);
     },
     chart() {
       const circles = this.svg("g")
@@ -73,26 +111,25 @@ export default {
         .append("circle")
         .attr("class", "bc-circle")
         .attr("r", this.calcSize)
-        .style("fill", d => "blue") //TODO: Fix color
-        .on("mouseover", ({ name, color }, i, nodes) => {
+        .style("fill", this.colorScale)
+        .on("mouseover", ({ name }, i, nodes) => {
           this.tooltipText = name;
-          d3.select(nodes[i]).style("fill", ColorLuminance(color, -0.3));
+          select(nodes[i]).style("fill", "orange");
         })
         .on("mouseout", (d, i, nodes) => {
           this.tooltipText = "";
-          d3.select(nodes[i]).style("fill", "blue");
+          select(nodes[i]).style("fill", this.colorScale);
         })
         .on("click", ({ name }) => {
           this.filterToggle({ type: "topics", value: name });
         });
 
-      const simulation = d3
-        .forceSimulation()
-        .force("charge", d3.forceManyBody().strength(1))
-        .force("center", d3.forceCenter(this.size / 20, this.size / 20))
-        .force("collision", d3.forceCollide().radius(this.calcSize));
-      //.force("x", d3.forceX().strength(0.15))
-      //.force("y", d3.forceY().strength(0.15));
+      const simulation = forceSimulation()
+        .force("x", forceX().strength(this.forceStrength))
+        .force("y", forceY().strength(this.forceStrength))
+        // .force("center", d3.forceCenter([0, 0]).strength(this.forceStrength))
+        .force("collision", forceCollide().radius(this.calcSize))
+        .force("charge", forceManyBody().strength(5));
 
       simulation.nodes(this.dataArr).on("tick", ticked);
 
@@ -126,10 +163,5 @@ p {
 
 .bc-circle {
   transition: all 300ms;
-}
-
-.bc-circle:hover {
-  transform: scale(1.05);
-  transform-origin: 0px 0px 0px;
 }
 </style>
